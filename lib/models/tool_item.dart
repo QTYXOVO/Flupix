@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
+
 enum ToolCategory {
-  convert('换算'),
-  text('文本'),
-  time('时间'),
-  color('色彩'),
-  generate('生成'),
-  network('网络');
+  convert,
+  text,
+  generate,
+  other;
 
-  const ToolCategory(this.label);
-
-  final String label;
+  String get label => switch (this) {
+        ToolCategory.convert => AppL10n.current.categoryConvert,
+        ToolCategory.text => AppL10n.current.categoryText,
+        ToolCategory.generate => AppL10n.current.categoryGenerate,
+        ToolCategory.other => AppL10n.current.categoryOther,
+      };
 }
 
 class ToolItem {
@@ -20,11 +25,19 @@ class ToolItem {
     required this.icon,
     required this.category,
     required this.builder,
+    this.requiresShizuku = false,
   });
 
-  final String title;
-  final String subtitle;
+  final String Function(AppLocalizations l10n) title;
+  final String Function(AppLocalizations l10n) subtitle;
   final IconData icon;
   final ToolCategory category;
   final WidgetBuilder builder;
+
+  /// 是否需要 Shizuku Root 权限，首页卡片会展示对应标记。
+  final bool requiresShizuku;
+
+  /// 当前系统是否可以使用该工具，Shizuku 相关能力仅 Android 支持。
+  bool get isAvailableOnCurrentPlatform =>
+      !requiresShizuku || Platform.isAndroid;
 }

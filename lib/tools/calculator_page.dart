@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/expression.dart';
 import '../core/formatters.dart';
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class CalculatorPage extends StatefulWidget {
@@ -79,10 +80,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
             cursor: start - 1,
           );
         } else {
-          _setExpression(
-            text.replaceRange(start, end, ''),
-            cursor: start,
-          );
+          _setExpression(text.replaceRange(start, end, ''), cursor: start);
         }
       }
       return;
@@ -112,7 +110,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   void _calculate() {
     final text = _controller.text;
     if (text.trim().isEmpty) {
-      setState(() => _error = '请输入表达式');
+      setState(() => _error = AppL10n.current.calculatorEmptyExpression);
       return;
     }
     try {
@@ -134,6 +132,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -181,8 +180,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
     Widget row(List<Widget> children) => Row(children: children);
 
     return ToolPage(
-      title: '表达式计算',
-      subtitle: '支持括号、幂与四则混合运算',
+      title: l10n.calculatorPageTitle,
+      subtitle: l10n.calculatorPageSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -195,12 +194,12 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   textAlign: TextAlign.end,
                   style: textTheme.headlineSmall,
                   keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     filled: false,
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
-                    hintText: '输入表达式，如 (3+5)×2^3',
+                    hintText: l10n.calculatorHint,
                     contentPadding: EdgeInsets.zero,
                   ),
                   onChanged: (value) {
@@ -213,7 +212,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 const SizedBox(height: 8),
                 Text(
                   _error ?? '= $_preview',
-                  style: (_error != null
+                  style:
+                      (_error != null
                           ? textTheme.titleMedium?.copyWith(color: scheme.error)
                           : textTheme.headlineMedium?.copyWith(
                               fontWeight: FontWeight.w600,
@@ -387,14 +387,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        '历史记录',
-                        style: textTheme.titleSmall,
-                      ),
+                      Text(l10n.calculatorHistory, style: textTheme.titleSmall),
                       const Spacer(),
                       IconButton(
                         visualDensity: VisualDensity.compact,
-                        tooltip: '清空历史',
+                        tooltip: l10n.calculatorClearHistory,
                         onPressed: () => setState(_history.clear),
                         icon: const Icon(Icons.delete_outline, size: 20),
                       ),

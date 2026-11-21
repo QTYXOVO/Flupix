@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class MarkdownPage extends StatefulWidget {
@@ -165,23 +166,24 @@ class _MarkdownPageState extends State<MarkdownPage> {
   }
 
   void _insertTable() {
-    _insertBlock('| 列一 | 列二 |\n| --- | --- |\n| 内容 | 内容 |');
+    _insertBlock(context.l10n.markdownTableTemplate);
   }
 
   Future<void> _confirmClear() async {
+    final l10n = context.l10n;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('清空内容？'),
-        content: const Text('当前草稿会被删除，且无法恢复。'),
+        title: Text(l10n.markdownClearTitle),
+        content: Text(l10n.markdownClearMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('取消'),
+            child: Text(l10n.commonCancel),
           ),
           FilledButton.tonal(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('清空'),
+            child: Text(l10n.commonClear),
           ),
         ],
       ),
@@ -196,7 +198,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   void _copyLink(String? href) {
     if (href == null || href.isEmpty) return;
-    copyText(context, href, message: '已复制链接');
+    copyText(context, href, message: context.l10n.markdownLinkCopied);
   }
 
   void _notify(String message, {bool error = false}) {
@@ -216,7 +218,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   Future<void> _openFile() async {
     try {
       final file = await FilePicker.pickFile(
-        dialogTitle: '打开 Markdown 文件',
+        dialogTitle: context.l10n.markdownOpenDialogTitle,
         type: FileType.custom,
         allowedExtensions: const ['md', 'markdown', 'txt'],
       );
@@ -234,23 +236,23 @@ class _MarkdownPageState extends State<MarkdownPage> {
       });
       await _saveDraft();
       if (!mounted) return;
-      _notify('已打开 ${file.name}');
+      _notify(context.l10n.markdownOpened(file.name));
     } catch (error) {
       if (!mounted) return;
-      _notify('打开失败：$error', error: true);
+      _notify(context.l10n.markdownOpenFailed('$error'), error: true);
     }
   }
 
   Future<void> _exportFile() async {
     final text = _controller.text;
-    final base = _fileName ?? '未命名.md';
+    final base = _fileName ?? context.l10n.markdownUntitledFileName;
     final target = base.toLowerCase().endsWith('.md') ? base : '$base.md';
     try {
       final uri = await FilePicker.saveFile(
         fileName: target,
         bytes: Uint8List.fromList(utf8.encode(text)),
         mimeType: 'text/markdown',
-        dialogTitle: '导出 Markdown',
+        dialogTitle: context.l10n.markdownExportDialogTitle,
       );
       if (uri == null || !mounted) return;
       // 桌面端返回文件路径，可取得实际另存的文件名；移动端返回 content:// 标识，沿用默认名。
@@ -259,10 +261,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
           ? Uri.decodeComponent(segments.last)
           : target;
       setState(() => _fileName = savedName);
-      _notify('已导出 $savedName');
+      _notify(context.l10n.markdownExported(savedName));
     } catch (error) {
       if (!mounted) return;
-      _notify('导出失败：$error', error: true);
+      _notify(context.l10n.markdownExportFailed('$error'), error: true);
     }
   }
 
@@ -301,22 +303,23 @@ class _MarkdownPageState extends State<MarkdownPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final textTheme = Theme.of(context).textTheme;
     final scheme = Theme.of(context).colorScheme;
     final text = _controller.text;
     final lineCount = text.isEmpty ? 0 : '\n'.allMatches(text).length + 1;
 
     return ToolPage(
-      title: 'Markdown 编辑',
-      subtitle: 'GFM 预览 · .md 导入导出',
+      title: l10n.markdownTitle,
+      subtitle: l10n.markdownSubtitle,
       actions: [
         IconButton(
-          tooltip: '打开 .md 文件',
+          tooltip: l10n.markdownOpenFileTooltip,
           onPressed: _openFile,
           icon: const Icon(Icons.folder_open_outlined),
         ),
         IconButton(
-          tooltip: '导出为 .md 文件',
+          tooltip: l10n.markdownExportTooltip,
           onPressed: text.isEmpty ? null : _exportFile,
           icon: const Icon(Icons.save_alt_outlined),
         ),
@@ -332,16 +335,16 @@ class _MarkdownPageState extends State<MarkdownPage> {
                   children: [
                     if (!wide)
                       SegmentedButton<bool>(
-                        segments: const [
+                        segments: [
                           ButtonSegment(
                             value: false,
-                            icon: Icon(Icons.edit_outlined, size: 18),
-                            label: Text('编辑'),
+                            icon: const Icon(Icons.edit_outlined, size: 18),
+                            label: Text(l10n.commonEdit),
                           ),
                           ButtonSegment(
                             value: true,
-                            icon: Icon(Icons.visibility_outlined, size: 18),
-                            label: Text('预览'),
+                            icon: const Icon(Icons.visibility_outlined, size: 18),
+                            label: Text(l10n.commonPreview),
                           ),
                         ],
                         selected: {_previewOnly},
@@ -351,7 +354,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
                       ),
                     const Spacer(),
                     Text(
-                      '$lineCount 行 · ${text.length} 字符',
+                      l10n.markdownStats(lineCount, text.length),
                       style: textTheme.bodySmall?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
@@ -381,6 +384,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   }
 
   Widget _buildEditor(BuildContext context) {
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -393,53 +397,73 @@ class _MarkdownPageState extends State<MarkdownPage> {
             padding: const EdgeInsets.fromLTRB(6, 6, 6, 2),
             child: Wrap(
               children: [
-                _toolButton(Icons.title, '一级标题', () => _toggleLinePrefix('# ')),
-                _toolButton(Icons.text_fields, '二级标题', () => _toggleLinePrefix('## ')),
+                _toolButton(
+                  Icons.title,
+                  l10n.markdownHeading1,
+                  () => _toggleLinePrefix('# '),
+                ),
+                _toolButton(
+                  Icons.text_fields,
+                  l10n.markdownHeading2,
+                  () => _toggleLinePrefix('## '),
+                ),
                 _toolButton(
                   Icons.format_bold,
-                  '粗体',
-                  () => _wrapSelection('**', '**', '粗体'),
+                  l10n.markdownBold,
+                  () => _wrapSelection('**', '**', l10n.markdownBold),
                 ),
                 _toolButton(
                   Icons.format_italic,
-                  '斜体',
-                  () => _wrapSelection('*', '*', '斜体'),
+                  l10n.markdownItalic,
+                  () => _wrapSelection('*', '*', l10n.markdownItalic),
                 ),
                 _toolButton(
                   Icons.code,
-                  '行内代码',
+                  l10n.markdownInlineCode,
                   () => _wrapSelection('`', '`', 'code'),
                 ),
                 _toolButton(
                   Icons.format_list_bulleted,
-                  '无序列表',
+                  l10n.markdownBulletList,
                   () => _toggleLinePrefix('- '),
                 ),
                 _toolButton(
                   Icons.format_list_numbered,
-                  '有序列表',
+                  l10n.markdownOrderedList,
                   () => _toggleLinePrefix('1. '),
                 ),
                 _toolButton(
                   Icons.check_box_outlined,
-                  '任务列表',
+                  l10n.markdownTaskList,
                   () => _toggleLinePrefix('- [ ] '),
                 ),
                 _toolButton(
                   Icons.format_quote,
-                  '引用',
+                  l10n.markdownQuote,
                   () => _toggleLinePrefix('> '),
                 ),
                 _toolButton(
                   Icons.link,
-                  '链接',
-                  () => _wrapSelection('[', '](https://)', '链接文字'),
+                  l10n.markdownLink,
+                  () => _wrapSelection(
+                    '[',
+                    '](https://)',
+                    l10n.markdownLinkPlaceholder,
+                  ),
                 ),
-                _toolButton(Icons.data_array, '代码块', _insertCodeBlock),
-                _toolButton(Icons.table_chart_outlined, '表格', _insertTable),
+                _toolButton(
+                  Icons.data_array,
+                  l10n.markdownCodeBlock,
+                  _insertCodeBlock,
+                ),
+                _toolButton(
+                  Icons.table_chart_outlined,
+                  l10n.markdownTable,
+                  _insertTable,
+                ),
                 _toolButton(
                   Icons.horizontal_rule,
-                  '分隔线',
+                  l10n.markdownDivider,
                   () => _insertBlock('---'),
                 ),
               ],
@@ -459,10 +483,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
                 fontFamily: 'monospace',
                 height: 1.7,
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: '# 在这里开始写 Markdown…',
-                contentPadding: EdgeInsets.all(16),
+                hintText: l10n.markdownEditorHint,
+                contentPadding: const EdgeInsets.all(16),
               ),
               onChanged: (_) => _onTextChanged(),
             ),
@@ -475,8 +499,8 @@ class _MarkdownPageState extends State<MarkdownPage> {
                 Expanded(
                   child: Text(
                     _fileName == null
-                        ? '草稿自动保存在本机'
-                        : '$_fileName · 草稿自动保存',
+                        ? l10n.markdownDraftSavedLocally
+                        : l10n.markdownDraftAutoSaved(_fileName!),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: textTheme.bodySmall?.copyWith(
@@ -488,17 +512,17 @@ class _MarkdownPageState extends State<MarkdownPage> {
                   onPressed: _controller.text.isEmpty
                       ? null
                       : () => copyText(
-                            context,
-                            _controller.text,
-                            message: '已复制 Markdown 源码',
-                          ),
+                          context,
+                          _controller.text,
+                          message: l10n.markdownSourceCopied,
+                        ),
                   icon: const Icon(Icons.copy_all_outlined, size: 18),
-                  label: const Text('复制'),
+                  label: Text(l10n.commonCopy),
                 ),
                 TextButton.icon(
                   onPressed: _controller.text.isEmpty ? null : _confirmClear,
                   icon: const Icon(Icons.delete_outline, size: 18),
-                  label: const Text('清空'),
+                  label: Text(l10n.commonClear),
                 ),
               ],
             ),
@@ -519,6 +543,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
   }
 
   Widget _buildPreview(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final text = _controller.text.trim();
@@ -531,14 +556,14 @@ class _MarkdownPageState extends State<MarkdownPage> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
-            child: Text('预览', style: textTheme.labelLarge),
+            child: Text(l10n.commonPreview, style: textTheme.labelLarge),
           ),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
               child: text.isEmpty
                   ? Text(
-                      '左侧输入的 Markdown 会实时渲染在这里',
+                      l10n.markdownPreviewPlaceholder,
                       style: textTheme.bodyMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),

@@ -14,6 +14,8 @@ analyzer:
     - build/**
     - android/**
     - windows/**
+    # 第三方插件的本地副本，保持原样，不参与本项目的 lint。
+    - third_party/**
 
 linter:
   # The lint rules applied to this project can be customized in the

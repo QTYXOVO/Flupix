@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import '../l10n/l10n.dart';
+
 class ExpressionException implements Exception {
   ExpressionException(this.message);
 
@@ -13,7 +15,7 @@ class ExpressionException implements Exception {
 double evaluateExpression(String source) {
   final expression = source.trim();
   if (expression.isEmpty) {
-    throw ExpressionException('请输入表达式');
+    throw ExpressionException(AppL10n.current.expressionEmpty);
   }
   final tokens = _tokenize(expression);
   final values = <double>[];
@@ -30,7 +32,9 @@ double evaluateExpression(String source) {
         _apply(operators.removeLast(), values);
       }
       if (operators.isEmpty) {
-        throw ExpressionException('括号不匹配');
+        throw ExpressionException(
+          AppL10n.current.expressionUnmatchedParenthesis,
+        );
       }
       operators.removeLast();
     } else {
@@ -46,17 +50,17 @@ double evaluateExpression(String source) {
   while (operators.isNotEmpty) {
     final operator = operators.removeLast();
     if (operator == '(') {
-      throw ExpressionException('括号不匹配');
+      throw ExpressionException(AppL10n.current.expressionUnmatchedParenthesis);
     }
     _apply(operator, values);
   }
 
   if (values.length != 1) {
-    throw ExpressionException('表达式不完整');
+    throw ExpressionException(AppL10n.current.expressionIncomplete);
   }
   final result = values.single;
   if (result.isNaN || result.isInfinite) {
-    throw ExpressionException('结果无效');
+    throw ExpressionException(AppL10n.current.expressionInvalidResult);
   }
   return result;
 }
@@ -92,13 +96,13 @@ bool _shouldPop(String top, String current) {
 void _apply(String operator, List<double> values) {
   if (operator == '~') {
     if (values.isEmpty) {
-      throw ExpressionException('表达式不完整');
+      throw ExpressionException(AppL10n.current.expressionIncomplete);
     }
     values[values.length - 1] = -values.last;
     return;
   }
   if (values.length < 2) {
-    throw ExpressionException('表达式不完整');
+    throw ExpressionException(AppL10n.current.expressionIncomplete);
   }
   final right = values.removeLast();
   final left = values.removeLast();
@@ -111,18 +115,20 @@ void _apply(String operator, List<double> values) {
       values.add(left * right);
     case '/':
       if (right == 0) {
-        throw ExpressionException('除数不能为 0');
+        throw ExpressionException(AppL10n.current.expressionDivideByZero);
       }
       values.add(left / right);
     case '%':
       if (right == 0) {
-        throw ExpressionException('除数不能为 0');
+        throw ExpressionException(AppL10n.current.expressionDivideByZero);
       }
       values.add(left % right);
     case '^':
       values.add(math.pow(left, right).toDouble());
     default:
-      throw ExpressionException('未知运算符 $operator');
+      throw ExpressionException(
+        AppL10n.current.expressionUnknownOperator(operator),
+      );
   }
 }
 
@@ -167,7 +173,9 @@ List<String> _tokenize(String input) {
       }
       final number = input.substring(start, index);
       if (dots > 1 || number == '.') {
-        throw ExpressionException('数字格式有误: $number');
+        throw ExpressionException(
+          AppL10n.current.expressionInvalidNumber(number),
+        );
       }
       tokens.add(number);
       expectOperand = false;
@@ -198,10 +206,11 @@ List<String> _tokenize(String input) {
       expectOperand = false;
       continue;
     }
-    throw ExpressionException('无法识别字符 "$char"');
+    throw ExpressionException(AppL10n.current.expressionUnknownCharacter(char));
   }
 
   return tokens;
 }
 
-bool _isDigit(String char) => char.codeUnitAt(0) >= 48 && char.codeUnitAt(0) <= 57;
+bool _isDigit(String char) =>
+    char.codeUnitAt(0) >= 48 && char.codeUnitAt(0) <= 57;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../core/pixiv_auth.dart';
+import '../l10n/l10n.dart';
 
 /// pixiv 官方登录页，登录完成后自动截获重定向中的授权码。
 class PixivOAuthPage extends StatefulWidget {
@@ -36,10 +37,11 @@ class _PixivOAuthPageState extends State<PixivOAuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('登录 pixiv'),
+        title: Text(l10n.pixivLoginTitle),
         bottom: _progress < 1
             ? PreferredSize(
                 preferredSize: const Size.fromHeight(3),
@@ -92,10 +94,9 @@ class _PixivOAuthPageState extends State<PixivOAuthPage> {
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
             color: scheme.surfaceContainerLow,
             child: Text(
-              '请在页面中完成 pixiv 登录。登录成功后会自动返回，若弹出「打开 Pixiv 应用」提示可忽略。',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+              l10n.pixivLoginPageHint,
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: scheme.onSurfaceVariant),
             ),
           ),
         ],
@@ -129,7 +130,7 @@ class _PixivCookiePageState extends State<PixivCookiePage> {
       if (!mounted) return;
       if (session.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('未找到 PHPSESSID，请先在页面中登录 pixiv')),
+          SnackBar(content: Text(context.l10n.pixivPhpSessionMissing)),
         );
         return;
       }
@@ -137,7 +138,7 @@ class _PixivCookiePageState extends State<PixivCookiePage> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('读取 Cookie 失败，请重试')),
+        SnackBar(content: Text(context.l10n.pixivCookieReadFailed)),
       );
     } finally {
       if (mounted) setState(() => _collecting = false);
@@ -146,13 +147,16 @@ class _PixivCookiePageState extends State<PixivCookiePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('登录 pixiv 网页版'),
+        title: Text(l10n.pixivCookiePageTitle),
         actions: [
           TextButton(
             onPressed: _collecting ? null : _collect,
-            child: Text(_collecting ? '读取中…' : '完成'),
+            child: Text(
+              _collecting ? l10n.pixivReadingCookie : l10n.commonDone,
+            ),
           ),
           const SizedBox(width: 8),
         ],

@@ -1,3 +1,5 @@
+import '../l10n/l10n.dart';
+
 String twoDigits(int value) => value.toString().padLeft(2, '0');
 
 String formatDateTime(DateTime time, {bool withSeconds = true}) {
@@ -7,7 +9,15 @@ String formatDateTime(DateTime time, {bool withSeconds = true}) {
   return withSeconds ? '$base:${twoDigits(time.second)}' : base;
 }
 
-const List<String> _weekdayNames = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+List<String> get _weekdayNames => [
+  AppL10n.current.weekdayMonday,
+  AppL10n.current.weekdayTuesday,
+  AppL10n.current.weekdayWednesday,
+  AppL10n.current.weekdayThursday,
+  AppL10n.current.weekdayFriday,
+  AppL10n.current.weekdaySaturday,
+  AppL10n.current.weekdaySunday,
+];
 
 String weekdayLabel(DateTime time) => _weekdayNames[time.weekday - 1];
 
@@ -29,4 +39,5 @@ String formatNumber(double value, {int precision = 12}) {
 }
 
 /// 格式化为两位小写十六进制，用于颜色输出。
-String hexPair(int value) => value.toRadixString(16).padLeft(2, '0').toUpperCase();
+String hexPair(int value) =>
+    value.toRadixString(16).padLeft(2, '0').toUpperCase();

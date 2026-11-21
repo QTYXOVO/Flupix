@@ -1,0 +1,1533 @@
+{
+  "@@locale": "zh",
+  "commonCopy": "复制",
+  "commonCopied": "已复制到剪贴板",
+  "commonClear": "清空",
+  "commonCancel": "取消",
+  "commonConfirm": "确定",
+  "commonSave": "保存",
+  "commonDelete": "删除",
+  "commonRetry": "重试",
+  "commonRefresh": "刷新",
+  "commonSearch": "搜索",
+  "commonClose": "关闭",
+  "commonLoading": "加载中…",
+  "commonEmpty": "暂无内容",
+  "commonAll": "全部",
+  "commonSettings": "设置",
+  "commonOpen": "打开",
+  "commonStart": "开始",
+  "commonStop": "停止",
+  "commonPause": "暂停",
+  "commonResume": "继续",
+  "commonDone": "完成",
+  "commonEdit": "编辑",
+  "commonAdd": "添加",
+  "commonRemove": "移除",
+  "commonSelectAll": "全选",
+  "commonDeselectAll": "取消全选",
+  "commonUnknown": "未知",
+  "commonError": "出错了",
+  "commonSuccess": "操作成功",
+  "commonYes": "是",
+  "commonNo": "否",
+  "commonBrowse": "浏览",
+  "commonPickFile": "选择文件",
+  "commonShare": "分享",
+  "commonPreview": "预览",
+  "commonApply": "应用",
+  "commonMore": "更多",
+  "commonBack": "返回",
+  "homeSubtitle": "常用小工具，随手即用",
+  "homeToolCount": "共 {count} 项 · 全部离线运行",
+  "@homeToolCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeFilterAll": "全部",
+  "homeSettingsTooltip": "设置",
+  "homeDisabledBadge": "当前平台不可用",
+  "homeShizukuPermissionTitle": "需要 Shizuku 授权",
+  "homeShizukuCannotRead": "无法读取 Shizuku 状态，请前往设置检查授权。",
+  "homeShizukuNotInstalled": "未安装 Shizuku。请先安装 Shizuku，再到设置中完成授权。",
+  "homeShizukuNotRunning": "Shizuku 未运行。请打开 Shizuku 并通过 Root 启动服务，再到设置中授权。",
+  "homeShizukuNotGranted": "尚未授权 Flupix 使用 Shizuku，请前往设置完成授权。",
+  "homeShizukuNotRoot": "Shizuku 当前不是 Root 模式，请以 Root 启动后到设置中授权。",
+  "homeShizukuGoSettingsHint": "请前往设置完成 Shizuku 授权。",
+  "homeShizukuGoSettings": "去设置",
+  "categoryConvert": "转换",
+  "categoryText": "文本",
+  "categoryGenerate": "生成",
+  "categoryOther": "其他",
+  "toolUnitConverterTitle": "单位换算",
+  "toolUnitConverterDesc": "长度、面积、体积、质量、温度、速度、数据存储",
+  "toolCalculatorTitle": "表达式计算",
+  "toolCalculatorDesc": "支持括号、幂运算与四则混合计算",
+  "toolTextCodecTitle": "文本编解码",
+  "toolTextCodecDesc": "Base64 与 URL 编码、解码",
+  "toolJsonTitle": "JSON 格式化",
+  "toolJsonDesc": "校验、格式化与压缩 JSON 文本",
+  "toolMarkdownTitle": "Markdown 编辑",
+  "toolMarkdownDesc": "实时预览、语法快捷插入与草稿保存",
+  "toolHashTitle": "哈希计算",
+  "toolHashDesc": "MD5、SHA-1、SHA-256、SHA-512",
+  "toolTimestampTitle": "时间戳转换",
+  "toolTimestampDesc": "Unix 时间戳与日期时间互转",
+  "toolColorTitle": "颜色工具",
+  "toolColorDesc": "HEX / RGB / HSL 互转与配色预览",
+  "toolAudioConvertTitle": "音频格式转换",
+  "toolAudioConvertDesc": "MP3、WAV、FLAC、M4A 等格式互转",
+  "toolPasswordTitle": "密码生成",
+  "toolPasswordDesc": "安全随机密码与强度评估",
+  "toolQrTitle": "二维码生成",
+  "toolQrDesc": "将文本生成可扫描的二维码",
+  "toolMetronomeTitle": "节拍器",
+  "toolMetronomeDesc": "BPM 调节、拍号重音、点击测速与可视节拍",
+  "toolPuzzleTitle": "数字华容道",
+  "toolPuzzleDesc": "自定义图片与 1:1 裁切，支持 3×3 至 5×5",
+  "toolQqStickerTitle": "QQ 表情包",
+  "toolQqStickerDesc": "借助 Shizuku Root 权限，从 QQ 缓存保存表情到相册",
+  "toolEhTitle": "E-Hentai",
+  "toolEhDesc": "搜索、浏览与阅读 E-Hentai / ExHentai 图库",
+  "toolPixivTitle": "Pixiv Token",
+  "toolPixivDesc": "OAuth 登录获取 access_token 与 PHPSESSID",
+  "settingsTitle": "设置",
+  "settingsSubtitleAndroid": "外观、主题与权限",
+  "settingsSubtitleDesktop": "外观、主题与网络",
+  "settingsAppearanceMode": "外观模式",
+  "settingsThemeSystem": "系统",
+  "settingsThemeLight": "浅色",
+  "settingsThemeDark": "深色",
+  "settingsSeedColor": "主题色",
+  "settingsSeedColorHint": "Material You 会由主题色生成整套色调",
+  "settingsLanguage": "语言",
+  "settingsLanguageSystem": "跟随系统",
+  "settingsLanguageChinese": "简体中文",
+  "settingsLanguageEnglish": "English",
+  "settingsShowDisabled": "显示已禁用的功能",
+  "settingsShowDisabledHint": "在首页显示当前系统无法使用或尚未实现的功能，卡片会置灰且不可点击。",
+  "settingsProxyTitle": "网络代理",
+  "settingsProxyDescription": "供 Pixiv 与 E-Hentai 等工具使用；留空时自动读取 Windows 系统代理，Android 端请使用系统 VPN。",
+  "settingsProxyAddress": "代理地址",
+  "settingsProxySave": "保存代理",
+  "settingsProxySaving": "保存中…",
+  "settingsProxyReadSystem": "读取系统代理",
+  "settingsProxySaved": "代理已保存：{address}",
+  "@settingsProxySaved": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsProxyDirect": "已切换为直连",
+  "settingsProxySystemMissing": "未检测到已启用的系统代理，请先开启代理软件",
+  "settingsShizukuTitle": "Shizuku 授权",
+  "settingsShizukuDescription": "需要 Root 权限的工具会通过 Shizuku 读取应用私有数据。",
+  "settingsShizukuChecking": "正在检测 Shizuku…",
+  "settingsShizukuError": "无法读取 Shizuku 状态，请确认设备为 Android 且已安装 Shizuku。",
+  "settingsShizukuGrant": "授权 Shizuku",
+  "settingsShizukuGranting": "授权中…",
+  "settingsShizukuOpen": "打开 Shizuku",
+  "settingsShizukuRefresh": "重新检测",
+  "settingsShizukuGrantedRoot": "已授权（Root）",
+  "settingsShizukuNotInstalled": "未安装 Shizuku",
+  "settingsShizukuNotRunning": "Shizuku 未运行",
+  "settingsShizukuNotGranted": "未授权",
+  "settingsShizukuInsufficient": "权限不足（uid={uid}）",
+  "@settingsShizukuInsufficient": {
+    "placeholders": {
+      "uid": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsShizukuInstallHint": "请先安装 Shizuku 应用，再返回此处授权。",
+  "settingsShizukuRunHint": "请打开 Shizuku，并通过 Root 启动服务。",
+  "settingsShizukuGrantHint": "允许 Flupix 访问 Shizuku 后才能读取 QQ 表情缓存。",
+  "settingsShizukuRootHint": "请停止 Shizuku，并以 Root（uid=0）重新启动。",
+  "settingsShizukuReadyHint": "Flupix 已获得 Root 权限，可用于需要 Shizuku 的工具。",
+  "settingsShizukuGrantedMessage": "Shizuku 授权成功",
+  "settingsShizukuDeniedMessage": "Shizuku 授权被拒绝",
+  "settingsShizukuRequestFailed": "请求授权失败：{error}",
+  "@settingsShizukuRequestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsShizukuNotFound": "未找到 Shizuku 应用",
+  "settingsShizukuOpenFailed": "无法打开 Shizuku：{error}",
+  "@settingsShizukuOpenFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateCurrentVersion": "当前版本 {version}",
+  "@settingsUpdateCurrentVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateCheck": "检查更新",
+  "settingsUpdateChecking": "检查中…",
+  "settingsUpdateLatest": "已是最新版本（{version}）",
+  "@settingsUpdateLatest": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateCheckFailed": "检查更新失败：{error}",
+  "@settingsUpdateCheckFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateAvailableTitle": "发现新版本 {version}",
+  "@settingsUpdateAvailableTitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateReleaseNotes": "更新内容",
+  "settingsUpdateNoNotes": "该版本没有提供更新说明。",
+  "settingsUpdateDownload": "前往下载",
+  "settingsUpdateOpenReleases": "打开发布页",
+  "settingsUpdateOpenFailed": "无法打开链接",
+  "settingsAboutVersion": "版本 {version} · Flutter + Material You",
+  "@settingsAboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAboutPrivacy": "所有工具均在本地运行，不收集任何数据。",
+  "seedPine": "松绿",
+  "seedIndigo": "靛蓝",
+  "seedViolet": "紫罗兰",
+  "seedSky": "天青",
+  "seedMoss": "苔绿",
+  "seedAmber": "琥珀",
+  "seedRose": "玫红",
+  "seedGraphite": "石墨",
+  "textCodecTitle": "文本编解码",
+  "textCodecSubtitle": "Base64 与 URL 编码互转",
+  "textCodecEncode": "编码",
+  "textCodecDecode": "解码",
+  "textCodecInputLabel": "输入内容",
+  "textCodecInputEncodeHint": "输入需要编码的文本",
+  "textCodecInputDecodeHint": "粘贴需要解码的内容",
+  "textCodecCharCount": "{count} 个字符",
+  "@textCodecCharCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "textCodecResultTitle": "转换结果",
+  "textCodecCopyResult": "复制结果",
+  "textCodecResultPlaceholder": "结果会显示在这里",
+  "textCodecInvalidBase64": "Base64 内容无效，无法解码",
+  "textCodecInvalidUrl": "URL 编码格式无效，无法解码",
+  "textCodecConvertFailed": "转换失败，请检查输入内容",
+  "jsonTitle": "JSON 格式化",
+  "jsonSubtitle": "校验、格式化与压缩 JSON 文本",
+  "jsonInputLabel": "JSON 内容",
+  "jsonInputHint": "粘贴 JSON 文本，例如 {leftBrace}\"name\": \"Flupix\"{rightBrace}",
+  "@jsonInputHint": {
+    "placeholders": {
+      "leftBrace": {
+        "type": "String"
+      },
+      "rightBrace": {
+        "type": "String"
+      }
+    }
+  },
+  "jsonFormat": "格式化",
+  "jsonMinify": "压缩",
+  "jsonOutputTitle": "输出结果",
+  "jsonCopyResult": "复制结果",
+  "jsonOutputPlaceholder": "格式化后的 JSON 会显示在这里",
+  "jsonEmptyInput": "请输入 JSON 内容",
+  "jsonValidMeta": "JSON 有效 · {count} 个字符",
+  "@jsonValidMeta": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jsonParseFailed": "解析失败：{error}",
+  "@jsonParseFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "markdownTitle": "Markdown 编辑",
+  "markdownSubtitle": "GFM 预览 · .md 导入导出",
+  "markdownOpenFileTooltip": "打开 .md 文件",
+  "markdownExportTooltip": "导出为 .md 文件",
+  "markdownStats": "{lines} 行 · {chars} 字符",
+  "@markdownStats": {
+    "placeholders": {
+      "lines": {
+        "type": "int"
+      },
+      "chars": {
+        "type": "int"
+      }
+    }
+  },
+  "markdownHeading1": "一级标题",
+  "markdownHeading2": "二级标题",
+  "markdownBold": "粗体",
+  "markdownItalic": "斜体",
+  "markdownInlineCode": "行内代码",
+  "markdownBulletList": "无序列表",
+  "markdownOrderedList": "有序列表",
+  "markdownTaskList": "任务列表",
+  "markdownQuote": "引用",
+  "markdownLink": "链接",
+  "markdownLinkPlaceholder": "链接文字",
+  "markdownCodeBlock": "代码块",
+  "markdownTable": "表格",
+  "markdownTableTemplate": "| 列一 | 列二 |\n| --- | --- |\n| 内容 | 内容 |",
+  "markdownDivider": "分隔线",
+  "markdownEditorHint": "# 在这里开始写 Markdown…",
+  "markdownDraftSavedLocally": "草稿自动保存在本机",
+  "markdownDraftAutoSaved": "{name} · 草稿自动保存",
+  "@markdownDraftAutoSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "markdownSourceCopied": "已复制 Markdown 源码",
+  "markdownPreviewPlaceholder": "左侧输入的 Markdown 会实时渲染在这里",
+  "markdownClearTitle": "清空内容？",
+  "markdownClearMessage": "当前草稿会被删除，且无法恢复。",
+  "markdownLinkCopied": "已复制链接",
+  "markdownOpenDialogTitle": "打开 Markdown 文件",
+  "markdownOpened": "已打开 {name}",
+  "@markdownOpened": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "markdownOpenFailed": "打开失败：{error}",
+  "@markdownOpenFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "markdownUntitledFileName": "未命名.md",
+  "markdownExportDialogTitle": "导出 Markdown",
+  "markdownExported": "已导出 {name}",
+  "@markdownExported": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "markdownExportFailed": "导出失败：{error}",
+  "@markdownExportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "hashTitle": "哈希计算",
+  "hashSubtitle": "把文本转换为不可逆的摘要值",
+  "hashInputLabel": "输入文本",
+  "hashInputHint": "输入或粘贴需要计算哈希的内容",
+  "hashByteCount": "UTF-8 编码 · {count} 字节",
+  "@hashByteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hashEmptyHint": "输入文本后会自动计算 MD5、SHA-1、SHA-256 与 SHA-512。",
+  "unitPageTitle": "单位换算",
+  "unitPageSubtitle": "选择分类后输入数值，实时换算",
+  "unitCategoryLength": "长度",
+  "unitCategoryArea": "面积",
+  "unitCategoryVolume": "体积",
+  "unitCategoryMass": "质量",
+  "unitCategoryTemperature": "温度",
+  "unitCategorySpeed": "速度",
+  "unitCategoryDataStorage": "数据存储",
+  "unitKilometer": "千米",
+  "unitMeter": "米",
+  "unitDecimeter": "分米",
+  "unitCentimeter": "厘米",
+  "unitMillimeter": "毫米",
+  "unitMicrometer": "微米",
+  "unitNanometer": "纳米",
+  "unitMile": "英里",
+  "unitYard": "码",
+  "unitFoot": "英尺",
+  "unitInch": "英寸",
+  "unitNauticalMile": "海里",
+  "unitLi": "里",
+  "unitZhang": "丈",
+  "unitChi": "尺",
+  "unitCun": "寸",
+  "unitSquareKilometer": "平方千米",
+  "unitHectare": "公顷",
+  "unitMu": "亩",
+  "unitSquareMeter": "平方米",
+  "unitSquareDecimeter": "平方分米",
+  "unitSquareCentimeter": "平方厘米",
+  "unitAcre": "英亩",
+  "unitSquareFoot": "平方英尺",
+  "unitSquareInch": "平方英寸",
+  "unitCubicMeter": "立方米",
+  "unitLiter": "升",
+  "unitMilliliter": "毫升",
+  "unitCubicCentimeter": "立方厘米",
+  "unitGallonUs": "加仑（美）",
+  "unitQuartUs": "夸脱（美）",
+  "unitCubicFoot": "立方英尺",
+  "unitCubicInch": "立方英寸",
+  "unitTonne": "吨",
+  "unitKilogram": "千克",
+  "unitGram": "克",
+  "unitMilligram": "毫克",
+  "unitJin": "斤",
+  "unitLiang": "两",
+  "unitPound": "磅",
+  "unitOunce": "盎司",
+  "unitCarat": "克拉",
+  "unitCelsius": "摄氏度",
+  "unitFahrenheit": "华氏度",
+  "unitKelvin": "开尔文",
+  "unitMeterPerSecond": "米/秒",
+  "unitKilometerPerHour": "千米/时",
+  "unitMeterPerMinute": "米/分",
+  "unitMilePerHour": "英里/时",
+  "unitKnot": "节",
+  "unitFootPerSecond": "英尺/秒",
+  "unitBit": "位",
+  "unitByte": "字节",
+  "unitKilobyte": "千字节",
+  "unitMegabyte": "兆字节",
+  "unitGigabyte": "吉字节",
+  "unitTerabyte": "太字节",
+  "unitInputLabel": "输入",
+  "unitFromLabel": "单位",
+  "unitValueLabel": "数值",
+  "unitSwapTooltip": "交换单位",
+  "unitToLabel": "换算为",
+  "unitResultTitle": "换算结果",
+  "unitCopyResultTooltip": "复制结果",
+  "unitEnterValidValue": "请输入有效数值",
+  "unitConversionFormula": "1 {from} = {value} {to}",
+  "@unitConversionFormula": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "timestampPageTitle": "时间戳转换",
+  "timestampPageSubtitle": "Unix 时间戳与本地、UTC 时间互转",
+  "timestampCurrentTime": "当前时间",
+  "timestampSeconds": "秒级时间戳",
+  "timestampMilliseconds": "毫秒级时间戳",
+  "timestampUtcIso": "UTC 时间（ISO 8601）",
+  "timestampToDateTime": "时间戳 → 日期时间",
+  "timestampLabel": "时间戳",
+  "timestampHint": "支持秒级或毫秒级，自动识别",
+  "timestampNow": "当前",
+  "timestampLocalTime": "本地时间",
+  "timestampUtcTime": "UTC 时间",
+  "timestampIso8601": "ISO 8601",
+  "timestampEmptyHint": "输入时间戳后显示对应日期时间",
+  "timestampFromDateTime": "日期时间 → 时间戳",
+  "timestampPick": "选择",
+  "timestampErrorNotInteger": "请输入整数时间戳",
+  "timestampErrorOutOfRange": "时间戳超出可表示范围",
+  "colorPageTitle": "颜色工具",
+  "colorPageSubtitle": "HEX / RGB / HSL 互转与 Material You 配色",
+  "colorHexLabel": "HEX 颜色",
+  "colorChannelAdjust": "调整通道",
+  "colorPreviewTitle": "配色预览",
+  "colorPreviewSubtitle": "基于当前颜色生成的 Material You 色调",
+  "colorSwatchPrimary": "主色",
+  "colorSwatchSecondary": "次色",
+  "colorSwatchTertiary": "第三色",
+  "colorSwatchContainer": "容器色",
+  "colorSwatchSurface": "表面",
+  "colorSwatchSurfaceHigh": "强调表面",
+  "colorErrorInvalidHex": "请输入有效的 HEX 颜色，如 #3A7BD5",
+  "calculatorPageTitle": "表达式计算",
+  "calculatorPageSubtitle": "支持括号、幂与四则混合运算",
+  "calculatorHint": "输入表达式，如 (3+5)×2^3",
+  "calculatorHistory": "历史记录",
+  "calculatorClearHistory": "清空历史",
+  "calculatorEmptyExpression": "请输入表达式",
+  "expressionEmpty": "请输入表达式",
+  "expressionUnmatchedParenthesis": "括号不匹配",
+  "expressionIncomplete": "表达式不完整",
+  "expressionInvalidResult": "结果无效",
+  "expressionDivideByZero": "除数不能为 0",
+  "expressionUnknownOperator": "未知运算符 {operator}",
+  "@expressionUnknownOperator": {
+    "placeholders": {
+      "operator": {
+        "type": "String"
+      }
+    }
+  },
+  "expressionInvalidNumber": "数字格式有误: {number}",
+  "@expressionInvalidNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "expressionUnknownCharacter": "无法识别字符 \"{char}\"",
+  "@expressionUnknownCharacter": {
+    "placeholders": {
+      "char": {
+        "type": "String"
+      }
+    }
+  },
+  "weekdayMonday": "周一",
+  "weekdayTuesday": "周二",
+  "weekdayWednesday": "周三",
+  "weekdayThursday": "周四",
+  "weekdayFriday": "周五",
+  "weekdaySaturday": "周六",
+  "weekdaySunday": "周日",
+  "audioConvertTitle": "音频格式转换",
+  "audioConvertSubtitle": "MP3、WAV、FLAC、M4A 等格式互转",
+  "audioSelectAudioFile": "选择音频文件",
+  "audioReadFailed": "读取音频失败：{error}",
+  "@audioReadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "audioConvertDoneHint": "转换完成，可保存到本地",
+  "audioConvertCancelled": "已取消转换",
+  "audioConvertFailedToast": "转换失败",
+  "audioSavedName": "已保存 {name}",
+  "@audioSavedName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "audioSaveFailed": "保存失败：{error}",
+  "@audioSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "audioSaveAudioFile": "保存音频文件",
+  "audioSizeUnknown": "大小未知",
+  "audioChannelsUnknown": "声道未知",
+  "audioMono": "单声道",
+  "audioStereo": "立体声",
+  "audioChannelsCount": "{count} 声道",
+  "@audioChannelsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "audioConvertTo": "转换为 {format}",
+  "@audioConvertTo": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "audioEngineLine": "FFmpeg {version} · 转码在本机离线完成",
+  "@audioEngineLine": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "audioEngineLoading": "加载中",
+  "audioSupportedFormats": "支持 MP3、WAV、FLAC、M4A、AAC、OGG 等格式",
+  "audioChangeFile": "更换文件",
+  "audioUnknownCodec": "未知编码",
+  "audioBrowseLocal": "浏览本地文件",
+  "audioOutputFormat": "输出格式",
+  "audioBitrate": "码率",
+  "audioBitrateValue": "{value} kbps",
+  "@audioBitrateValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "audioBitDepth": "位深",
+  "audioBitDepth16": "16 位",
+  "audioBitDepth24": "24 位",
+  "audioBitDepthFloat32": "32 位浮点",
+  "audioSampleRate": "采样率",
+  "audioKeepOriginal": "保持原样",
+  "audioChannels": "声道",
+  "audioConvertingTo": "正在转换为 {format}",
+  "@audioConvertingTo": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "audioProcessing": "处理中",
+  "audioSpeedValue": "速度 {speed}x",
+  "@audioSpeedValue": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "audioPreparing": "准备中…",
+  "audioConvertDoneTitle": "转换完成",
+  "audioSaving": "保存中…",
+  "audioSaveFile": "保存文件",
+  "audioFfprobeNotFound": "未找到 ffprobe，请先安装 FFmpeg 并加入系统 PATH",
+  "audioFfmpegNotFound": "未找到 ffmpeg，请先安装 FFmpeg 并加入系统 PATH",
+  "audioProbeParseFailed": "无法解析音频信息",
+  "audioNoAudioStream": "未在文件中找到音频流",
+  "audioConvertFailedHint": "转码失败，请确认音频文件可正常播放",
+  "audioConvertFailed": "转码失败",
+  "metronomeTitle": "节拍器",
+  "metronomeSubtitle": "调节 BPM、拍号重音与音量，支持点击测速",
+  "metronomeDecreaseBpm": "减少 1 BPM",
+  "metronomeIncreaseBpm": "增加 1 BPM",
+  "metronomeTapTempo": "点击测速",
+  "metronomeTempo": "速度",
+  "metronomeBpmValue": "{bpm} BPM",
+  "@metronomeBpmValue": {
+    "placeholders": {
+      "bpm": {
+        "type": "int"
+      }
+    }
+  },
+  "metronomeBeatsPerBar": "每小节拍数",
+  "metronomeAccent": "小节重音",
+  "metronomeAccentHint": "每小节第一拍使用更高音与高亮显示",
+  "metronomeSound": "声音提示",
+  "metronomeSoundHint": "关闭后仅保留可视节拍",
+  "metronomeVolume": "音量",
+  "puzzleTitle": "数字华容道",
+  "puzzleSubtitlePlaying": "点击与空格相邻的方块滑动",
+  "puzzleSubtitleSetup": "自定义图片与 1:1 裁切",
+  "puzzleSelectImage": "选择图片",
+  "puzzleImportFailed": "导入图片失败：{error}",
+  "@puzzleImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleSolvedTitle": "拼好了",
+  "puzzleSolvedStats": "用时 {elapsed} · {moves} 步",
+  "@puzzleSolvedStats": {
+    "placeholders": {
+      "elapsed": {
+        "type": "String"
+      },
+      "moves": {
+        "type": "int"
+      }
+    }
+  },
+  "puzzleBackToSetup": "返回设置",
+  "puzzlePlayAgain": "再来一局",
+  "puzzleClassicMode": "经典数字模式",
+  "puzzleCustomImage": "自定义图片",
+  "puzzlePickImageHint": "选择一张图片，导入时可拖动、缩放决定 1:1 裁切区域。",
+  "puzzleCropSavedHint": "已保存 1:1 裁切区域，可随时更换图片或重新裁切。",
+  "puzzleImporting": "导入中…",
+  "puzzleChangeImage": "更换图片",
+  "puzzleDifficulty": "难度",
+  "puzzleDifficultyHint": "方块越多越难，建议从 3 × 3 开始。",
+  "puzzleHowToPlay": "点击空格相邻的方块即可交换位置，把图片或数字按顺序还原即获胜。",
+  "puzzleStartGame": "开始游戏",
+  "puzzleMoves": "步数",
+  "puzzleTime": "用时",
+  "puzzleViewOriginal": "查看原图",
+  "puzzleShuffle": "重新打乱",
+  "puzzleShowNumbers": "显示数字",
+  "puzzleSolvedHint": "已完成，点击「重新打乱」再来一局",
+  "puzzleSlideHint": "点击与空格相邻的方块即可滑动",
+  "puzzleSelectCrop": "选择裁切区域",
+  "puzzleCropHint": "拖动图片调整位置，双指缩放或使用滑块放大；方框内即为最终 1:1 画面。",
+  "puzzleReset": "重置",
+  "puzzleUseArea": "使用此区域",
+  "qqStickerTitle": "QQ 表情包",
+  "qqStickerSubtitle": "从 QQ 缓存提取并保存到相册",
+  "qqStickerReadStatusFailed": "读取 Shizuku 状态失败",
+  "qqStickerReadStatusFailedDetail": "读取 Shizuku 状态失败：{error}",
+  "@qqStickerReadStatusFailedDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qqStickerNoStickers": "未找到可保存的表情",
+  "qqStickerFoundPacks": "共找到 {count} 个表情包",
+  "@qqStickerFoundPacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerScanFailed": "扫描 QQ 表情缓存失败",
+  "qqStickerScanFailedDetail": "扫描失败：{error}",
+  "@qqStickerScanFailedDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qqStickerSaveFailedRetry": "保存失败，请重试",
+  "qqStickerSavedToFolder": "已保存 {saved} 张表情到 Pictures/Flupix/QQ表情",
+  "@qqStickerSavedToFolder": {
+    "placeholders": {
+      "saved": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerSaveFailedSuffix": "，{failed} 张失败",
+  "@qqStickerSaveFailedSuffix": {
+    "placeholders": {
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerSavedToGallery": "已保存 {saved} 张表情到相册",
+  "@qqStickerSavedToGallery": {
+    "placeholders": {
+      "saved": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerSaveFailed": "保存失败",
+  "qqStickerSaveFailedDetail": "保存失败：{error}",
+  "@qqStickerSaveFailedDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qqStickerAndroidOnly": "该工具仅在 Android 设备上可用",
+  "qqStickerPacks": "表情包",
+  "qqStickerPacksCount": "共 {count} 个",
+  "@qqStickerPacksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerSaveLocation": "保存位置：Pictures/Flupix/QQ表情/<表情包ID>",
+  "qqStickerQqMissing": "未检测到 QQ",
+  "qqStickerQqMissingDetail": "本工具读取 QQ 的表情缓存，请先安装并登录 QQ。",
+  "qqStickerShizukuMissing": "未安装 Shizuku",
+  "qqStickerShizukuMissingDetail": "需要 Shizuku（Root 模式）才能访问 QQ 的私有缓存目录。",
+  "qqStickerShizukuStopped": "Shizuku 未运行",
+  "qqStickerShizukuStoppedDetail": "请在设置中打开并启动 Shizuku（Root 模式）。",
+  "qqStickerShizukuDenied": "等待 Shizuku 授权",
+  "qqStickerShizukuDeniedDetail": "请前往设置完成 Shizuku 授权。",
+  "qqStickerShizukuInsufficient": "Shizuku 权限不足",
+  "qqStickerShizukuInsufficientDetail": "当前以 uid={uid} 运行，请在设置中改为 Root（uid=0）启动。",
+  "@qqStickerShizukuInsufficientDetail": {
+    "placeholders": {
+      "uid": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerNoCache": "未找到 QQ 表情缓存",
+  "qqStickerNoCacheDetail": "请先在 QQ 中打开表情面板并加载表情，再重新检测。",
+  "qqStickerReady": "环境就绪",
+  "qqStickerReadyHintEmpty": "已取得 Root 权限，可以扫描 QQ 表情缓存。",
+  "qqStickerReadyHintCount": "已读取 {count} 个表情包，可勾选后保存。",
+  "@qqStickerReadyHintCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerUnknownStatus": "无法读取状态",
+  "qqStickerUnknownStatusDetail": "Shizuku 状态未知，请重新检测。",
+  "qqStickerGoSettings": "前往设置",
+  "qqStickerScanning": "扫描中…",
+  "qqStickerScan": "扫描表情包",
+  "qqStickerRescan": "重新扫描",
+  "qqStickerPackTitle": "表情包 {id}",
+  "@qqStickerPackTitle": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "qqStickerPackSelectedSummary": "{total} 个 · 已选 {selected}",
+  "@qqStickerPackSelectedSummary": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      },
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerPackSummary": "{count} 个表情",
+  "@qqStickerPackSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerTapToSelect": "点击表情选择",
+  "qqStickerSelectPack": "全选本包",
+  "qqStickerSelectedCount": "已选 {count} 张",
+  "@qqStickerSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qqStickerSaveToAlbum": "保存到 相册/Pictures/Flupix/QQ表情",
+  "qqStickerSaving": "保存中…",
+  "passwordSubtitle": "使用加密安全随机数生成密码",
+  "passwordResult": "生成结果",
+  "passwordEmptyHint": "请选择至少一种字符类型",
+  "passwordSelectAtLeastOne": "至少选择一种字符类型",
+  "passwordEntropy": "约 {bits} 位熵",
+  "@passwordEntropy": {
+    "placeholders": {
+      "bits": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordRegenerate": "重新生成",
+  "passwordCopyTooltip": "复制密码",
+  "passwordLength": "密码长度",
+  "passwordUppercase": "大写字母",
+  "passwordLowercase": "小写字母",
+  "passwordDigits": "数字",
+  "passwordSymbols": "符号",
+  "passwordExcludeAmbiguous": "排除易混淆字符",
+  "passwordExcludeAmbiguousHint": "去掉 O、0、l、1、I 等容易看错的字符",
+  "passwordStrengthWeak": "较弱",
+  "passwordStrengthFair": "一般",
+  "passwordStrengthStrong": "强",
+  "passwordStrengthVeryStrong": "很强",
+  "qrSubtitle": "输入文本即可生成可扫描的二维码",
+  "qrContentLabel": "二维码内容",
+  "qrContentHint": "支持文本、网址、联系方式等",
+  "qrEmptyTip": "输入内容后生成二维码",
+  "qrTooLong": "内容过长（{bytes} 字节），请精简到约 1800 字节以内",
+  "@qrTooLong": {
+    "placeholders": {
+      "bytes": {
+        "type": "int"
+      }
+    }
+  },
+  "qrCharCount": "{count} 个字符",
+  "@qrCharCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "qrCopiedContent": "内容已复制",
+  "qrCopyContent": "复制内容",
+  "qrSize": "二维码尺寸",
+  "qrSizePx": "{size} px",
+  "@qrSizePx": {
+    "placeholders": {
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "qrUseThemeColor": "使用主题色",
+  "qrUseThemeColorHint": "开启后二维码模块使用当前主题主色",
+  "pixivTokenSubtitle": "OAuth 登录获取与刷新令牌",
+  "pixivLoginTitle": "登录 pixiv",
+  "pixivLoginCancelled": "已取消登录",
+  "pixivLoginSuccess": "登录成功，已获取 Token",
+  "pixivLoginFailed": "登录失败：{error}",
+  "@pixivLoginFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivTokenRefreshed": "Token 已刷新",
+  "pixivRefreshFailed": "刷新失败：{error}",
+  "@pixivRefreshFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivClearDataTitle": "清除本地数据",
+  "pixivClearDataBody": "将删除本机保存的 access_token 与 refresh_token，之后需要重新登录。",
+  "pixivClearAction": "清除",
+  "pixivTokenCleared": "已清除本地 Token",
+  "pixivPhpSessionObtained": "已获取 PHPSESSID",
+  "pixivTokenExpired": "已过期，请刷新",
+  "pixivTokenRemaining": "剩余 {time}",
+  "@pixivTokenRemaining": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivTokenSection": "令牌",
+  "pixivTokenCopyAll": "复制全部",
+  "pixivWebCookieTitle": "Web 端 Cookie",
+  "pixivWebCookieDesc": "Pixeval 等使用 WebAPI 的工具需要 PHPSESSID，需在 pixiv 网页版登录后读取。",
+  "pixivFetchCookie": "获取 pixiv.net Cookie",
+  "pixivFetchCookieAgain": "重新获取",
+  "pixivSecurityTitle": "安全提示",
+  "pixivSecurityBody": "access_token 与 refresh_token 等同于账号凭证，请勿分享或提交到公开仓库。令牌仅保存在本机，除 pixiv 官方域名外不会向任何服务器发送数据。",
+  "pixivNotLoggedIn": "未登录",
+  "pixivLoggedIn": "已登录",
+  "pixivLoginHint": "登录后可获取 access_token 与 refresh_token",
+  "pixivProcessing": "处理中…",
+  "pixivRefreshTokenButton": "刷新 Token",
+  "pixivReloginButton": "重新登录",
+  "pixivTokenHide": "隐藏",
+  "pixivTokenShow": "显示",
+  "pixivLoginPageHint": "请在页面中完成 pixiv 登录。登录成功后会自动返回，若弹出「打开 Pixiv 应用」提示可忽略。",
+  "pixivPhpSessionMissing": "未找到 PHPSESSID，请先在页面中登录 pixiv",
+  "pixivCookieReadFailed": "读取 Cookie 失败，请重试",
+  "pixivCookiePageTitle": "登录 pixiv 网页版",
+  "pixivReadingCookie": "读取中…",
+  "pixivConnectionFailed": "无法连接 pixiv 服务器（{reason}）。oauth.secure.pixiv.net 在中国大陆通常无法直连，请先配置代理。",
+  "@pixivConnectionFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivTimeout": "请求超时，请检查网络状态或代理地址是否正确。",
+  "pixivDirectConnection": "当前为直连",
+  "pixivErrorWithAddress": "当前代理 {address}",
+  "@pixivErrorWithAddress": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivConnectionFailedWithTarget": "无法连接 pixiv 服务器（{target}），请确认代理已开启且地址正确。",
+  "@pixivConnectionFailedWithTarget": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivNetworkError": "网络请求失败：{message}",
+  "@pixivNetworkError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "pixivInvalidResponse": "服务器返回了无法解析的内容（HTTP {status}）",
+  "@pixivInvalidResponse": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "ehSiteEHentai": "E-Hentai",
+  "ehSiteExHentai": "ExHentai",
+  "ehCategoryMisc": "杂项",
+  "ehCategoryDoujinshi": "同人志",
+  "ehCategoryManga": "漫画",
+  "ehCategoryArtistCg": "画师 CG",
+  "ehCategoryGameCg": "游戏 CG",
+  "ehCategoryImageSet": "图集",
+  "ehCategoryCosplay": "Cosplay",
+  "ehCategoryAsian": "亚洲",
+  "ehCategoryNonH": "非 H",
+  "ehCategoryWestern": "欧美",
+  "ehBrowseLoggedIn": "已登录",
+  "ehBrowseGuest": "访客",
+  "ehBrowseSwitchSite": "切换站点",
+  "ehBrowseRelogin": "重新登录",
+  "ehBrowseLogin": "登录",
+  "ehBrowseMyLibrary": "我的图库",
+  "ehBrowseDownloads": "下载管理",
+  "ehBrowseLogout": "退出登录",
+  "ehBrowseSearchHint": "搜索标题、标签或上传者",
+  "ehBrowseGuestBanner": "未登录只能浏览列表，阅读与 ExHentai 需要登录。",
+  "ehBrowseNoResults": "没有找到结果",
+  "ehBrowseTotalResults": "共约 {count} 个结果",
+  "@ehBrowseTotalResults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ehBrowseReachedPage": "已到第 {page} 页",
+  "@ehBrowseReachedPage": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "ehBrowseNoMore": "没有更多了",
+  "ehBrowseInitFailed": "初始化失败：{error}",
+  "@ehBrowseInitFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehFilterExcludeHint": "选中表示排除该分类",
+  "ehDetailTitle": "图库详情",
+  "ehDetailCannotRead": "无法获取页数，暂时不能阅读",
+  "ehDetailFavoriteAdded": "已加入收藏",
+  "ehDetailFavoriteRemoved": "已取消收藏",
+  "ehDetailDownloadToLocal": "下载到本地",
+  "ehDetailDownloaded": "已下载",
+  "ehDetailPauseDownload": "暂停下载",
+  "ehDetailCancelQueue": "取消排队",
+  "ehDetailRetryDownload": "重试下载",
+  "ehDetailResumeDownload": "继续下载",
+  "ehDetailQueuedWithPages": "已加入下载队列（共 {total} 页）",
+  "@ehDetailQueuedWithPages": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ehDetailQueued": "已加入下载队列",
+  "ehDetailDownloadProgress": "{downloaded}/{total} 页",
+  "@ehDetailDownloadProgress": {
+    "placeholders": {
+      "downloaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ehDetailQueuedProgress": "已加入下载队列 · {progress}",
+  "@ehDetailQueuedProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDetailDownloadingProgress": "正在下载 · {progress}",
+  "@ehDetailDownloadingProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDetailPausedProgress": "已暂停 · {progress}",
+  "@ehDetailPausedProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDetailPausedError": "已暂停 · {error}",
+  "@ehDetailPausedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDetailCompletedProgress": "已下载 · {progress}",
+  "@ehDetailCompletedProgress": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDetailFailedError": "下载失败 · {error}",
+  "@ehDetailFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDetailUnknownError": "未知错误",
+  "ehDetailUnfavorite": "取消收藏",
+  "ehDetailFavorite": "收藏",
+  "ehDetailTags": "标签",
+  "ehDetailTapToJump": "点击跳页",
+  "ehDetailStartReading": "开始阅读",
+  "ehDetailContinueReading": "继续阅读 第 {page} 页",
+  "@ehDetailContinueReading": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "ehDetailPagesCount": "{pages} 页",
+  "@ehDetailPagesCount": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "ehDetailUploader": "上传者：{uploader}",
+  "@ehDetailUploader": {
+    "placeholders": {
+      "uploader": {
+        "type": "String"
+      }
+    }
+  },
+  "ehReaderLocalImageFailed": "本地图片读取失败",
+  "ehReaderImageFailed": "图片加载失败",
+  "ehReaderRestartFromFirstPage": "从第一页开始",
+  "ehReaderLtr": "切换为从左到右",
+  "ehReaderRtl": "切换为从右到左",
+  "ehReaderGestureHint": "双击或双指缩放 · 点击中部显示/隐藏工具栏",
+  "ehReaderRateLimited": "站点限流或临时封禁，{seconds} 秒后可重试",
+  "@ehReaderRateLimited": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "ehReaderPageLoadFailed": "该页加载失败",
+  "ehTagTitle": "标签检索",
+  "ehTagImportTitle": "导入标签翻译",
+  "ehTagImportAction": "导入",
+  "ehTagImported": "已导入 {count} 条翻译",
+  "@ehTagImported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ehTagImportFailed": "导入失败：{error}",
+  "@ehTagImportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehTagClearHistoryTitle": "清空标签历史",
+  "ehTagClearHistoryMessage": "将删除全部本地标签记录。",
+  "ehTagHistoryCleared": "标签历史已清空",
+  "ehTagClearTranslationsTitle": "清空导入的翻译",
+  "ehTagClearTranslationsMessage": "内置翻译仍会保留。",
+  "ehTagTranslationsCleared": "导入的翻译已清空",
+  "ehTagLocalCount": "共 {count} 个本地标签",
+  "@ehTagLocalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ehTagImportTooltip": "导入翻译",
+  "ehTagSearchHint": "搜索标签或中文翻译",
+  "ehTagNoMatch": "没有匹配的标签",
+  "ehTagNoRecords": "还没有标签记录",
+  "ehTagNoMatchHint": "试试其它关键词，或直接在图库详情中点击标签。",
+  "ehTagNoRecordsHint": "打开任意图库详情后会自动收集标签，也可以先导入翻译库。",
+  "ehTagImportLibrary": "导入翻译库",
+  "ehLoginTitle": "E-Hentai 登录",
+  "ehLoginTabWeb": "网页登录",
+  "ehLoginTabManual": "手动 Cookie",
+  "ehLoginReading": "读取中…",
+  "ehLoginHint": "登录 Cookie 仅保存在本机，用于访问 E-Hentai / ExHentai。",
+  "ehLoginNoCookie": "尚未检测到登录 Cookie，请先在网页中完成登录",
+  "ehLoginNotEffective": "网页登录未生效：请确认已通过验证并成功登录账号",
+  "ehLoginGotCookies": "已获取登录与 ExHentai Cookie，可点击右上角完成",
+  "ehLoginRefreshingExAfterLogin": "已登录，正在获取 ExHentai 权限…",
+  "ehLoginRefreshingEx": "正在获取 ExHentai 权限…",
+  "ehLoginExGranted": "已获得 ExHentai 权限，可返回浏览里站",
+  "ehLoginExGrantedViaWeb": "已通过网页获取 ExHentai 权限，可返回浏览里站",
+  "ehLoginClearWebCookiesTitle": "清空网页 Cookie",
+  "ehLoginClearWebCookiesMessage": "将清除 E-Hentai / ExHentai 的网页登录状态，并重新打开论坛登录页。",
+  "ehLoginClearWebCookiesConfirm": "清空并重新登录",
+  "ehLoginClearingCookies": "正在清空 Cookie…",
+  "ehLoginClearedCookies": "已清空网页 Cookie，请重新登录",
+  "ehLoginLoginFirst": "请先在网页中完成登录",
+  "ehLoginManualMissing": "需要至少包含 ipb_member_id 与 ipb_pass_hash",
+  "ehLoginCookieInvalid": "Cookie 无效或已过期，请重新获取",
+  "ehLoginPageLoadFailed": "页面加载失败：{error}",
+  "@ehLoginPageLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehLoginAutoHint": "登录后自动读取 Cookie 并换取 ExHentai 凭证。",
+  "ehLoginClearCookie": "清空 Cookie",
+  "ehLoginDetecting": "检测中…",
+  "ehLoginDetectEx": "检测 EX",
+  "ehLoginManualHint": "从已登录的浏览器复制完整 Cookie，至少包含 ipb_member_id、ipb_pass_hash，使用 ExHentai 时还需要 igneous。支持 key=value 或 key: value 换行格式。",
+  "ehLoginValidating": "校验中…",
+  "ehLoginValidateAndSave": "校验并保存",
+  "ehLibraryTitle": "我的图库",
+  "ehLibrarySubtitle": "{site} · 收藏 {favorites} · 历史 {history}",
+  "@ehLibrarySubtitle": {
+    "placeholders": {
+      "site": {
+        "type": "String"
+      },
+      "favorites": {
+        "type": "int"
+      },
+      "history": {
+        "type": "int"
+      }
+    }
+  },
+  "ehLibraryFavoritesSegment": "收藏 {count}",
+  "@ehLibraryFavoritesSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ehLibraryHistorySegment": "历史 {count}",
+  "@ehLibraryHistorySegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ehLibraryNoFavorites": "还没有收藏",
+  "ehLibraryNoFavoritesHint": "打开图库详情后点击右上角的心形按钮即可收藏。",
+  "ehLibraryTileSubtitle": "{category} · {pages} 页{rating}",
+  "@ehLibraryTileSubtitle": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "pages": {
+        "type": "int"
+      },
+      "rating": {
+        "type": "String"
+      }
+    }
+  },
+  "ehLibraryRemoveFavorite": "取消收藏",
+  "ehLibraryNoHistory": "还没有阅读记录",
+  "ehLibraryNoHistoryHint": "阅读任意图库后会自动记录进度，方便下次继续。",
+  "ehLibraryHistorySubtitle": "已读 {lastPage}/{totalPages} 页 · {time}",
+  "@ehLibraryHistorySubtitle": {
+    "placeholders": {
+      "lastPage": {
+        "type": "int"
+      },
+      "totalPages": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "ehLibraryRemoveHistory": "移除记录",
+  "ehLibraryTodayTime": "今天 {time}",
+  "@ehLibraryTodayTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadTitle": "下载管理",
+  "ehDownloadSummary": "共 {total} 个 · 完成 {completed} 个",
+  "@ehDownloadSummary": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      },
+      "completed": {
+        "type": "int"
+      }
+    }
+  },
+  "ehDownloadEmpty": "还没有下载任务",
+  "ehDownloadEmptyHint": "在图库详情页点击下载按钮，即可保存整本到本地并离线阅读。",
+  "ehDownloadDelete": "删除下载",
+  "ehDownloadDeleteConfirm": "确定删除「{title}」的本地文件吗？",
+  "@ehDownloadDeleteConfirm": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadDownloaded": "已下载",
+  "ehDownloadNoPages": "该图库还没有可阅读的页面",
+  "ehDownloadNoDownloadedPages": "还没有下载完成的页面",
+  "ehDownloadPagesProgress": "{downloaded}/{total} 页",
+  "@ehDownloadPagesProgress": {
+    "placeholders": {
+      "downloaded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ehDownloadStatusQueued": "等待下载 · {progress}",
+  "@ehDownloadStatusQueued": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadStatusDownloading": "正在下载 · {progress}",
+  "@ehDownloadStatusDownloading": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadStatusPaused": "已暂停 · {progress}",
+  "@ehDownloadStatusPaused": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadStatusPausedError": "已暂停 · {error}",
+  "@ehDownloadStatusPausedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadStatusCompleted": "已完成 · {progress}",
+  "@ehDownloadStatusCompleted": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadStatusFailed": "下载失败 · {error}",
+  "@ehDownloadStatusFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadUnknownError": "未知错误",
+  "ehStatusQueued": "等待下载",
+  "ehStatusDownloading": "下载中",
+  "ehStatusPaused": "已暂停",
+  "ehStatusCompleted": "已完成",
+  "ehStatusFailed": "下载失败",
+  "ehDownloadPagesUnknown": "无法获取图库页数",
+  "ehDownloadFailedWith": "下载失败：{error}",
+  "@ehDownloadFailedWith": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehDownloadPartial": "部分页面未下载，可继续重试",
+  "ehDownloadEmptyPage": "页面内容为空",
+  "ehDownloadDirUninitialized": "下载目录未初始化",
+  "ehDownloadPausedInManager": "已暂停，可在下载管理中继续",
+  "ehAuthEmptyExPage": "ExHentai 返回了空页面：请重新登录，并在登录页点击「检测 EX」获取里站权限",
+  "ehAuthEmptyList": "ExHentai 未返回列表：请确认登录有效，并在登录页点击「检测 EX」重新获取里站权限",
+  "ehAuthGetExExpired": "登录已失效，请重新登录后再获取 ExHentai 权限",
+  "ehAuthIgneousMystery": "账号尚未获得 ExHentai 里站权限（igneous=mystery），请确认账号资格后重试",
+  "ehAuthIgneousNoContent": "已获取 igneous，但 ExHentai 没有返回内容：账号可能没有里站权限或登录已失效",
+  "ehAuthLoginExpired": "登录已失效，请重新登录",
+  "ehAuthMissingCredential": "登录状态有效，但站点没有下发 ExHentai 凭证：请确认账号已获得里站权限",
+  "ehAuthSadPanda": "ExHentai 需要 igneous 凭证：请在登录页点击「检测 EX」重新授权",
+  "ehAuthSadPandaCookie": "ExHentai 需要 igneous Cookie：请在登录页点击「检测 EX」完成授权",
+  "ehBanLabelHoursMinutes": "{hours} 小时 {minutes} 分钟",
+  "@ehBanLabelHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "ehBanLabelMinutes": "{minutes} 分钟",
+  "@ehBanLabelMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "ehBanRecoverAfter": "当前 IP 被站点临时封禁，约 {duration}后恢复",
+  "@ehBanRecoverAfter": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "ehBanTemporary": "当前 IP 被站点临时封禁，请稍后重试",
+  "ehBanWaitRecovery": "当前 IP 被站点临时封禁，请等待站点提示的恢复时间",
+  "ehErrorCloudflare": "被 Cloudflare 拦截，请打开网页完成验证",
+  "ehErrorRateLimited": "图片服务器限流（509），请稍后再试",
+  "ehNetConnectFailed": "网络连接失败：{error}",
+  "@ehNetConnectFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehNetEmptyPage": "站点返回了空页面，可能被临时封禁或限流，请稍后重试",
+  "ehNetImageStatusError": "图片请求失败（{status}）",
+  "@ehNetImageStatusError": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "ehNetRequestFailed": "网络请求失败：{error}",
+  "@ehNetRequestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ehNetRequestStatusError": "请求失败（{status}）",
+  "@ehNetRequestStatusError": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "ehNetServerError": "服务器错误（{status}）",
+  "@ehNetServerError": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "ehNetTimeout": "请求超时，请检查网络或代理设置",
+  "ehNetTooManyRedirects": "页面跳转次数过多，请稍后重试",
+  "ehParseApiInvalid": "api.php 返回了无法解析的内容",
+  "ehParseDetailStructure": "详情页结构异常，无法找到标题",
+  "ehParseGalleryUnavailable": "图库不可用或已被删除",
+  "ehParseImageNotImage": "图片地址返回了非图片内容",
+  "ehParseImageUrlFailed": "无法解析该页图片地址",
+  "ehParseOtherTagGroup": "其它",
+  "ehParsePTokenMissing": "无法获取该页的 pToken，请从第一页开始阅读",
+  "ehParseShowkeyMissing": "图片页缺少 showkey，无法重新获取图片地址"
+}

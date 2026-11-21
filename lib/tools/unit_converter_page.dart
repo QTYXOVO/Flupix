@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/formatters.dart';
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class _Unit {
@@ -20,7 +21,8 @@ class _Unit {
 
   double baseValue(double value) => toBase?.call(value) ?? value * factor;
 
-  double convertedValue(double value) => fromBase?.call(value) ?? value / factor;
+  double convertedValue(double value) =>
+      fromBase?.call(value) ?? value / factor;
 }
 
 class _Category {
@@ -41,124 +43,124 @@ class _Category {
 
 final List<_Category> _categories = [
   _Category(
-    '长度',
+    AppL10n.current.unitCategoryLength,
     Icons.straighten,
-    const [
-      _Unit('千米', 'km', factor: 1000),
-      _Unit('米', 'm'),
-      _Unit('分米', 'dm', factor: 0.1),
-      _Unit('厘米', 'cm', factor: 0.01),
-      _Unit('毫米', 'mm', factor: 0.001),
-      _Unit('微米', 'μm', factor: 0.000001),
-      _Unit('纳米', 'nm', factor: 0.000000001),
-      _Unit('英里', 'mi', factor: 1609.344),
-      _Unit('码', 'yd', factor: 0.9144),
-      _Unit('英尺', 'ft', factor: 0.3048),
-      _Unit('英寸', 'in', factor: 0.0254),
-      _Unit('海里', 'nmi', factor: 1852),
-      _Unit('里', '里', factor: 500),
-      _Unit('丈', '丈', factor: 10 / 3),
-      _Unit('尺', '尺', factor: 1 / 3),
-      _Unit('寸', '寸', factor: 0.1 / 3),
+    [
+      _Unit(AppL10n.current.unitKilometer, 'km', factor: 1000),
+      _Unit(AppL10n.current.unitMeter, 'm'),
+      _Unit(AppL10n.current.unitDecimeter, 'dm', factor: 0.1),
+      _Unit(AppL10n.current.unitCentimeter, 'cm', factor: 0.01),
+      _Unit(AppL10n.current.unitMillimeter, 'mm', factor: 0.001),
+      _Unit(AppL10n.current.unitMicrometer, 'μm', factor: 0.000001),
+      _Unit(AppL10n.current.unitNanometer, 'nm', factor: 0.000000001),
+      _Unit(AppL10n.current.unitMile, 'mi', factor: 1609.344),
+      _Unit(AppL10n.current.unitYard, 'yd', factor: 0.9144),
+      _Unit(AppL10n.current.unitFoot, 'ft', factor: 0.3048),
+      _Unit(AppL10n.current.unitInch, 'in', factor: 0.0254),
+      _Unit(AppL10n.current.unitNauticalMile, 'nmi', factor: 1852),
+      _Unit(AppL10n.current.unitLi, '里', factor: 500),
+      _Unit(AppL10n.current.unitZhang, '丈', factor: 10 / 3),
+      _Unit(AppL10n.current.unitChi, '尺', factor: 1 / 3),
+      _Unit(AppL10n.current.unitCun, '寸', factor: 0.1 / 3),
     ],
     defaultFrom: 1,
     defaultTo: 3,
   ),
   _Category(
-    '面积',
+    AppL10n.current.unitCategoryArea,
     Icons.crop_square,
-    const [
-      _Unit('平方千米', 'km²', factor: 1000000),
-      _Unit('公顷', 'ha', factor: 10000),
-      _Unit('亩', '亩', factor: 2000 / 3),
-      _Unit('平方米', 'm²'),
-      _Unit('平方分米', 'dm²', factor: 0.01),
-      _Unit('平方厘米', 'cm²', factor: 0.0001),
-      _Unit('英亩', 'ac', factor: 4046.8564224),
-      _Unit('平方英尺', 'ft²', factor: 0.09290304),
-      _Unit('平方英寸', 'in²', factor: 0.00064516),
+    [
+      _Unit(AppL10n.current.unitSquareKilometer, 'km²', factor: 1000000),
+      _Unit(AppL10n.current.unitHectare, 'ha', factor: 10000),
+      _Unit(AppL10n.current.unitMu, '亩', factor: 2000 / 3),
+      _Unit(AppL10n.current.unitSquareMeter, 'm²'),
+      _Unit(AppL10n.current.unitSquareDecimeter, 'dm²', factor: 0.01),
+      _Unit(AppL10n.current.unitSquareCentimeter, 'cm²', factor: 0.0001),
+      _Unit(AppL10n.current.unitAcre, 'ac', factor: 4046.8564224),
+      _Unit(AppL10n.current.unitSquareFoot, 'ft²', factor: 0.09290304),
+      _Unit(AppL10n.current.unitSquareInch, 'in²', factor: 0.00064516),
     ],
     defaultFrom: 3,
     defaultTo: 5,
   ),
   _Category(
-    '体积',
+    AppL10n.current.unitCategoryVolume,
     Icons.local_drink,
-    const [
-      _Unit('立方米', 'm³', factor: 1000),
-      _Unit('升', 'L'),
-      _Unit('毫升', 'mL', factor: 0.001),
-      _Unit('立方厘米', 'cm³', factor: 0.001),
-      _Unit('加仑（美）', 'gal', factor: 3.785411784),
-      _Unit('夸脱（美）', 'qt', factor: 0.946352946),
-      _Unit('立方英尺', 'ft³', factor: 28.316846592),
-      _Unit('立方英寸', 'in³', factor: 0.016387064),
+    [
+      _Unit(AppL10n.current.unitCubicMeter, 'm³', factor: 1000),
+      _Unit(AppL10n.current.unitLiter, 'L'),
+      _Unit(AppL10n.current.unitMilliliter, 'mL', factor: 0.001),
+      _Unit(AppL10n.current.unitCubicCentimeter, 'cm³', factor: 0.001),
+      _Unit(AppL10n.current.unitGallonUs, 'gal', factor: 3.785411784),
+      _Unit(AppL10n.current.unitQuartUs, 'qt', factor: 0.946352946),
+      _Unit(AppL10n.current.unitCubicFoot, 'ft³', factor: 28.316846592),
+      _Unit(AppL10n.current.unitCubicInch, 'in³', factor: 0.016387064),
     ],
     defaultFrom: 1,
     defaultTo: 2,
   ),
   _Category(
-    '质量',
+    AppL10n.current.unitCategoryMass,
     Icons.scale,
-    const [
-      _Unit('吨', 't', factor: 1000),
-      _Unit('千克', 'kg'),
-      _Unit('克', 'g', factor: 0.001),
-      _Unit('毫克', 'mg', factor: 0.000001),
-      _Unit('斤', '斤', factor: 0.5),
-      _Unit('两', '两', factor: 0.05),
-      _Unit('磅', 'lb', factor: 0.45359237),
-      _Unit('盎司', 'oz', factor: 0.028349523125),
-      _Unit('克拉', 'ct', factor: 0.0002),
+    [
+      _Unit(AppL10n.current.unitTonne, 't', factor: 1000),
+      _Unit(AppL10n.current.unitKilogram, 'kg'),
+      _Unit(AppL10n.current.unitGram, 'g', factor: 0.001),
+      _Unit(AppL10n.current.unitMilligram, 'mg', factor: 0.000001),
+      _Unit(AppL10n.current.unitJin, '斤', factor: 0.5),
+      _Unit(AppL10n.current.unitLiang, '两', factor: 0.05),
+      _Unit(AppL10n.current.unitPound, 'lb', factor: 0.45359237),
+      _Unit(AppL10n.current.unitOunce, 'oz', factor: 0.028349523125),
+      _Unit(AppL10n.current.unitCarat, 'ct', factor: 0.0002),
     ],
     defaultFrom: 1,
     defaultTo: 2,
   ),
   _Category(
-    '温度',
+    AppL10n.current.unitCategoryTemperature,
     Icons.thermostat,
-    const [
+    [
       _Unit(
-        '摄氏度',
+        AppL10n.current.unitCelsius,
         '°C',
         toBase: _celsiusToKelvin,
         fromBase: _kelvinToCelsius,
       ),
       _Unit(
-        '华氏度',
+        AppL10n.current.unitFahrenheit,
         '°F',
         toBase: _fahrenheitToKelvin,
         fromBase: _kelvinToFahrenheit,
       ),
-      _Unit('开尔文', 'K'),
+      _Unit(AppL10n.current.unitKelvin, 'K'),
     ],
     defaultFrom: 0,
     defaultTo: 1,
   ),
   _Category(
-    '速度',
+    AppL10n.current.unitCategorySpeed,
     Icons.speed,
-    const [
-      _Unit('米/秒', 'm/s'),
-      _Unit('千米/时', 'km/h', factor: 1 / 3.6),
-      _Unit('米/分', 'm/min', factor: 1 / 60),
-      _Unit('英里/时', 'mph', factor: 0.44704),
-      _Unit('节', 'kn', factor: 0.5144444444),
-      _Unit('英尺/秒', 'ft/s', factor: 0.3048),
+    [
+      _Unit(AppL10n.current.unitMeterPerSecond, 'm/s'),
+      _Unit(AppL10n.current.unitKilometerPerHour, 'km/h', factor: 1 / 3.6),
+      _Unit(AppL10n.current.unitMeterPerMinute, 'm/min', factor: 1 / 60),
+      _Unit(AppL10n.current.unitMilePerHour, 'mph', factor: 0.44704),
+      _Unit(AppL10n.current.unitKnot, 'kn', factor: 0.5144444444),
+      _Unit(AppL10n.current.unitFootPerSecond, 'ft/s', factor: 0.3048),
     ],
     defaultFrom: 0,
     defaultTo: 1,
   ),
   _Category(
-    '数据存储',
+    AppL10n.current.unitCategoryDataStorage,
     Icons.storage,
-    const [
-      _Unit('位', 'bit', factor: 0.125),
-      _Unit('字节', 'B'),
-      _Unit('千字节', 'KB', factor: 1024),
-      _Unit('兆字节', 'MB', factor: 1048576),
-      _Unit('吉字节', 'GB', factor: 1073741824),
-      _Unit('太字节', 'TB', factor: 1099511627776),
+    [
+      _Unit(AppL10n.current.unitBit, 'bit', factor: 0.125),
+      _Unit(AppL10n.current.unitByte, 'B'),
+      _Unit(AppL10n.current.unitKilobyte, 'KB', factor: 1024),
+      _Unit(AppL10n.current.unitMegabyte, 'MB', factor: 1048576),
+      _Unit(AppL10n.current.unitGigabyte, 'GB', factor: 1073741824),
+      _Unit(AppL10n.current.unitTerabyte, 'TB', factor: 1099511627776),
     ],
     defaultFrom: 2,
     defaultTo: 3,
@@ -224,14 +226,15 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final result = _result;
     final oneUnit = _toUnit.convertedValue(_fromUnit.baseValue(1));
 
     return ToolPage(
-      title: '单位换算',
-      subtitle: '选择分类后输入数值，实时换算',
+      title: l10n.unitPageTitle,
+      subtitle: l10n.unitPageSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -259,7 +262,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '输入',
+                  l10n.unitInputLabel,
                   style: textTheme.labelLarge?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
@@ -273,11 +276,15 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                         key: ValueKey('from-$_categoryIndex-$_fromIndex'),
                         initialValue: _fromIndex,
                         isExpanded: true,
-                        decoration: const InputDecoration(labelText: '单位'),
+                        decoration: InputDecoration(
+                          labelText: l10n.unitFromLabel,
+                        ),
                         items: [
-                          for (var index = 0;
-                              index < _category.units.length;
-                              index++)
+                          for (
+                            var index = 0;
+                            index < _category.units.length;
+                            index++
+                          )
                             DropdownMenuItem(
                               value: index,
                               child: Text(
@@ -301,7 +308,9 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                           decimal: true,
                           signed: true,
                         ),
-                        decoration: const InputDecoration(labelText: '数值'),
+                        decoration: InputDecoration(
+                          labelText: l10n.unitValueLabel,
+                        ),
                         onChanged: (_) => setState(() {}),
                       ),
                     ),
@@ -310,7 +319,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                 const SizedBox(height: 12),
                 Center(
                   child: IconButton.filledTonal(
-                    tooltip: '交换单位',
+                    tooltip: l10n.unitSwapTooltip,
                     onPressed: _swapUnits,
                     icon: const Icon(Icons.swap_vert),
                   ),
@@ -320,7 +329,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                   key: ValueKey('to-$_categoryIndex-$_toIndex'),
                   initialValue: _toIndex,
                   isExpanded: true,
-                  decoration: const InputDecoration(labelText: '换算为'),
+                  decoration: InputDecoration(labelText: l10n.unitToLabel),
                   items: [
                     for (var index = 0; index < _category.units.length; index++)
                       DropdownMenuItem(
@@ -349,7 +358,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                 Row(
                   children: [
                     Text(
-                      '换算结果',
+                      l10n.unitResultTitle,
                       style: textTheme.labelLarge?.copyWith(
                         color: scheme.onPrimaryContainer,
                       ),
@@ -357,7 +366,7 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                     const Spacer(),
                     IconButton(
                       visualDensity: VisualDensity.compact,
-                      tooltip: '复制结果',
+                      tooltip: l10n.unitCopyResultTooltip,
                       color: scheme.onPrimaryContainer,
                       onPressed: result == null
                           ? null
@@ -379,14 +388,18 @@ class _UnitConverterPageState extends State<UnitConverterPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  result == null ? '请输入有效数值' : _toUnit.name,
+                  result == null ? l10n.unitEnterValidValue : _toUnit.name,
                   style: textTheme.bodyMedium?.copyWith(
                     color: scheme.onPrimaryContainer.withValues(alpha: 0.85),
                   ),
                 ),
                 const Divider(height: 28),
                 Text(
-                  '1 ${_fromUnit.name} = ${formatNumber(oneUnit)} ${_toUnit.name}',
+                  l10n.unitConversionFormula(
+                    _fromUnit.name,
+                    formatNumber(oneUnit),
+                    _toUnit.name,
+                  ),
                   style: textTheme.bodySmall?.copyWith(
                     color: scheme.onPrimaryContainer.withValues(alpha: 0.8),
                   ),

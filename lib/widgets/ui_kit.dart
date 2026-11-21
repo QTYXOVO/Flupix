@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
+
 /// Material You 风格的圆角卡片容器。
 class SectionCard extends StatelessWidget {
   const SectionCard({
@@ -105,7 +107,7 @@ class CopyableValue extends StatelessWidget {
         ),
         IconButton(
           visualDensity: VisualDensity.compact,
-          tooltip: '复制',
+          tooltip: context.l10n.commonCopy,
           icon: Icon(Icons.copy_rounded, size: 18, color: scheme.onSurfaceVariant),
           onPressed: () => copyText(context, value),
         ),
@@ -117,15 +119,16 @@ class CopyableValue extends StatelessWidget {
 Future<void> copyText(
   BuildContext context,
   String text, {
-  String message = '已复制到剪贴板',
+  String? message,
 }) async {
+  final resolved = message ?? context.l10n.commonCopied;
   await Clipboard.setData(ClipboardData(text: text));
   if (!context.mounted) return;
   final messenger = ScaffoldMessenger.of(context);
   messenger
     ..hideCurrentSnackBar()
     ..showSnackBar(
-      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+      SnackBar(content: Text(resolved), duration: const Duration(seconds: 2)),
     );
 }
 

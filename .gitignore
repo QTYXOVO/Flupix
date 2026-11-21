@@ -62,3 +62,8 @@ windows/build/
 
 # Build artifacts
 build/
+
+*.jks
+*.keystore
+android/key.properties
+android/app/keystore.properties

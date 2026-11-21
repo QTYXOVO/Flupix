@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 
-class SeedPreset {
-  const SeedPreset(this.label, this.color);
+import '../l10n/l10n.dart';
 
-  final String label;
+class SeedPreset {
+  const SeedPreset(this.color);
+
   final Color color;
+
+  String get label => switch (color.toARGB32()) {
+        0xFF00796B => AppL10n.current.seedPine,
+        0xFF3949AB => AppL10n.current.seedIndigo,
+        0xFF6750A4 => AppL10n.current.seedViolet,
+        0xFF00639B => AppL10n.current.seedSky,
+        0xFF4C662B => AppL10n.current.seedMoss,
+        0xFF8A5100 => AppL10n.current.seedAmber,
+        0xFF9C4146 => AppL10n.current.seedRose,
+        0xFF4F5B62 => AppL10n.current.seedGraphite,
+        _ => '',
+      };
 }
 
 const List<SeedPreset> kSeedPresets = [
-  SeedPreset('松绿', Color(0xFF00796B)),
-  SeedPreset('靛蓝', Color(0xFF3949AB)),
-  SeedPreset('紫罗兰', Color(0xFF6750A4)),
-  SeedPreset('天青', Color(0xFF00639B)),
-  SeedPreset('苔绿', Color(0xFF4C662B)),
-  SeedPreset('琥珀', Color(0xFF8A5100)),
-  SeedPreset('玫红', Color(0xFF9C4146)),
-  SeedPreset('石墨', Color(0xFF4F5B62)),
+  SeedPreset(Color(0xFF00796B)),
+  SeedPreset(Color(0xFF3949AB)),
+  SeedPreset(Color(0xFF6750A4)),
+  SeedPreset(Color(0xFF00639B)),
+  SeedPreset(Color(0xFF4C662B)),
+  SeedPreset(Color(0xFF8A5100)),
+  SeedPreset(Color(0xFF9C4146)),
+  SeedPreset(Color(0xFF4F5B62)),
 ];
 
 ThemeData buildLightTheme(Color seed) => _buildTheme(seed, Brightness.light);

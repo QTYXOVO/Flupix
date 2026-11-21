@@ -10,6 +10,12 @@ set(BINARY_NAME "flupix")
 # versions of CMake.
 cmake_policy(VERSION 3.14...3.25)
 
+# flutter_inappwebview_windows 插件在 add_custom_command(TARGET) 中使用了 DEPENDS 参数，
+# CMake 3.31+ 会因此抛出 CMP0175 开发警告。此处按旧行为忽略该无效参数以消除告警。
+if(POLICY CMP0175)
+  set(CMAKE_POLICY_DEFAULT_CMP0175 OLD)
+endif()
+
 # Define build configuration option.
 get_property(IS_MULTICONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(IS_MULTICONFIG)

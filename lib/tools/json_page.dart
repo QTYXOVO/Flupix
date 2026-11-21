@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class JsonPage extends StatefulWidget {
@@ -28,7 +29,7 @@ class _JsonPageState extends State<JsonPage> {
     if (source.isEmpty) {
       setState(() {
         _output = '';
-        _error = '请输入 JSON 内容';
+        _error = context.l10n.jsonEmptyInput;
         _meta = null;
       });
       return;
@@ -41,12 +42,12 @@ class _JsonPageState extends State<JsonPage> {
       setState(() {
         _output = result;
         _error = null;
-        _meta = 'JSON 有效 · ${result.length} 个字符';
+        _meta = context.l10n.jsonValidMeta(result.length);
       });
     } on FormatException catch (error) {
       setState(() {
         _output = '';
-        _error = '解析失败：${error.message}';
+        _error = context.l10n.jsonParseFailed(error.message);
         _meta = null;
       });
     }
@@ -63,12 +64,13 @@ class _JsonPageState extends State<JsonPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return ToolPage(
-      title: 'JSON 格式化',
-      subtitle: '校验、格式化与压缩 JSON 文本',
+      title: l10n.jsonTitle,
+      subtitle: l10n.jsonSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -81,9 +83,9 @@ class _JsonPageState extends State<JsonPage> {
                   minLines: 5,
                   maxLines: 10,
                   keyboardType: TextInputType.multiline,
-                  decoration: const InputDecoration(
-                    labelText: 'JSON 内容',
-                    hintText: '粘贴 JSON 文本，例如 {"name": "Flupix"}',
+                  decoration: InputDecoration(
+                    labelText: l10n.jsonInputLabel,
+                    hintText: l10n.jsonInputHint('{', '}'),
                     alignLabelWithHint: true,
                   ),
                   onChanged: (_) => setState(() {}),
@@ -96,17 +98,17 @@ class _JsonPageState extends State<JsonPage> {
                     FilledButton.tonalIcon(
                       onPressed: () => _transform(pretty: true),
                       icon: const Icon(Icons.format_align_left),
-                      label: const Text('格式化'),
+                      label: Text(l10n.jsonFormat),
                     ),
                     FilledButton.tonalIcon(
                       onPressed: () => _transform(pretty: false),
                       icon: const Icon(Icons.compress),
-                      label: const Text('压缩'),
+                      label: Text(l10n.jsonMinify),
                     ),
                     TextButton.icon(
                       onPressed: _clear,
                       icon: const Icon(Icons.close),
-                      label: const Text('清空'),
+                      label: Text(l10n.commonClear),
                     ),
                   ],
                 ),
@@ -121,11 +123,11 @@ class _JsonPageState extends State<JsonPage> {
               children: [
                 Row(
                   children: [
-                    Text('输出结果', style: textTheme.labelLarge),
+                    Text(l10n.jsonOutputTitle, style: textTheme.labelLarge),
                     const Spacer(),
                     IconButton(
                       visualDensity: VisualDensity.compact,
-                      tooltip: '复制结果',
+                      tooltip: l10n.jsonCopyResult,
                       onPressed: _output.isEmpty
                           ? null
                           : () => copyText(context, _output),
@@ -141,7 +143,7 @@ class _JsonPageState extends State<JsonPage> {
                   )
                 else if (_output.isEmpty)
                   Text(
-                    '格式化后的 JSON 会显示在这里',
+                    l10n.jsonOutputPlaceholder,
                     style: textTheme.bodyMedium?.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),

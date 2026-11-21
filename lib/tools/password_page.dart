@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../core/formatters.dart' show formatNumber;
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class PasswordPage extends StatefulWidget {
@@ -53,7 +54,7 @@ class _PasswordPageState extends State<PasswordPage> {
     if (poolsInUse.isEmpty) {
       setState(() {
         _password = '';
-        _error = '至少选择一种字符类型';
+        _error = AppL10n.current.passwordSelectAtLeastOne;
       });
       return;
     }
@@ -89,15 +90,17 @@ class _PasswordPageState extends State<PasswordPage> {
   }
 
   String get _strengthLabel {
+    final l10n = context.l10n;
     final bits = _entropyBits;
-    if (bits < 40) return '较弱';
-    if (bits < 60) return '一般';
-    if (bits < 80) return '强';
-    return '很强';
+    if (bits < 40) return l10n.passwordStrengthWeak;
+    if (bits < 60) return l10n.passwordStrengthFair;
+    if (bits < 80) return l10n.passwordStrengthStrong;
+    return l10n.passwordStrengthVeryStrong;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -113,8 +116,8 @@ class _PasswordPageState extends State<PasswordPage> {
     };
 
     return ToolPage(
-      title: '密码生成',
-      subtitle: '使用加密安全随机数生成密码',
+      title: l10n.toolPasswordTitle,
+      subtitle: l10n.passwordSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -125,7 +128,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 Row(
                   children: [
-                    Text('生成结果', style: textTheme.labelLarge),
+                    Text(l10n.passwordResult, style: textTheme.labelLarge),
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -147,7 +150,7 @@ class _PasswordPageState extends State<PasswordPage> {
                 ),
                 const SizedBox(height: 12),
                 SelectableText(
-                  _password.isEmpty ? '请选择至少一种字符类型' : _password,
+                  _password.isEmpty ? l10n.passwordEmptyHint : _password,
                   style: textTheme.headlineSmall?.copyWith(
                     fontFamily: 'monospace',
                     letterSpacing: 1.2,
@@ -159,7 +162,9 @@ class _PasswordPageState extends State<PasswordPage> {
                 const SizedBox(height: 8),
                 Text(
                   _error ??
-                      '约 ${formatNumber(_entropyBits, precision: 4)} 位熵',
+                      l10n.passwordEntropy(
+                        formatNumber(_entropyBits, precision: 4),
+                      ),
                   style: textTheme.bodySmall?.copyWith(
                     color: _error != null
                         ? scheme.error
@@ -172,11 +177,11 @@ class _PasswordPageState extends State<PasswordPage> {
                     FilledButton.tonalIcon(
                       onPressed: _generate,
                       icon: const Icon(Icons.refresh),
-                      label: const Text('重新生成'),
+                      label: Text(l10n.passwordRegenerate),
                     ),
                     const SizedBox(width: 8),
                     IconButton.filled(
-                      tooltip: '复制密码',
+                      tooltip: l10n.passwordCopyTooltip,
                       onPressed: _password.isEmpty
                           ? null
                           : () => copyText(context, _password),
@@ -194,7 +199,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 Row(
                   children: [
-                    Text('密码长度', style: textTheme.titleSmall),
+                    Text(l10n.passwordLength, style: textTheme.titleSmall),
                     const Spacer(),
                     Text(
                       '$_length',
@@ -221,7 +226,7 @@ class _PasswordPageState extends State<PasswordPage> {
                   runSpacing: 8,
                   children: [
                     FilterChip(
-                      label: const Text('大写字母'),
+                      label: Text(l10n.passwordUppercase),
                       selected: _useUpper,
                       onSelected: (value) {
                         setState(() => _useUpper = value);
@@ -229,7 +234,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       },
                     ),
                     FilterChip(
-                      label: const Text('小写字母'),
+                      label: Text(l10n.passwordLowercase),
                       selected: _useLower,
                       onSelected: (value) {
                         setState(() => _useLower = value);
@@ -237,7 +242,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       },
                     ),
                     FilterChip(
-                      label: const Text('数字'),
+                      label: Text(l10n.passwordDigits),
                       selected: _useDigits,
                       onSelected: (value) {
                         setState(() => _useDigits = value);
@@ -245,7 +250,7 @@ class _PasswordPageState extends State<PasswordPage> {
                       },
                     ),
                     FilterChip(
-                      label: const Text('符号'),
+                      label: Text(l10n.passwordSymbols),
                       selected: _useSymbols,
                       onSelected: (value) {
                         setState(() => _useSymbols = value);
@@ -257,8 +262,8 @@ class _PasswordPageState extends State<PasswordPage> {
                 const SizedBox(height: 4),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('排除易混淆字符'),
-                  subtitle: const Text('去掉 O、0、l、1、I 等容易看错的字符'),
+                  title: Text(l10n.passwordExcludeAmbiguous),
+                  subtitle: Text(l10n.passwordExcludeAmbiguousHint),
                   value: _excludeAmbiguous,
                   onChanged: (value) {
                     setState(() => _excludeAmbiguous = value);

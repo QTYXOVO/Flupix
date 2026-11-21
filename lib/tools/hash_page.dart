@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class HashPage extends StatefulWidget {
@@ -39,13 +40,14 @@ class _HashPageState extends State<HashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final hasInput = _input.text.isNotEmpty;
 
     return ToolPage(
-      title: '哈希计算',
-      subtitle: '把文本转换为不可逆的摘要值',
+      title: l10n.hashTitle,
+      subtitle: l10n.hashSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -59,13 +61,13 @@ class _HashPageState extends State<HashPage> {
                   maxLines: 8,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    labelText: '输入文本',
-                    hintText: '输入或粘贴需要计算哈希的内容',
+                    labelText: l10n.hashInputLabel,
+                    hintText: l10n.hashInputHint,
                     alignLabelWithHint: true,
                     suffixIcon: _input.text.isEmpty
                         ? null
                         : IconButton(
-                            tooltip: '清空',
+                            tooltip: l10n.commonClear,
                             icon: const Icon(Icons.close),
                             onPressed: () {
                               _input.clear();
@@ -77,7 +79,7 @@ class _HashPageState extends State<HashPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'UTF-8 编码 · ${utf8.encode(_input.text).length} 字节',
+                  l10n.hashByteCount(utf8.encode(_input.text).length),
                   style: textTheme.bodySmall?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
@@ -90,7 +92,7 @@ class _HashPageState extends State<HashPage> {
             SectionCard(
               color: scheme.surfaceContainerHigh,
               child: Text(
-                '输入文本后会自动计算 MD5、SHA-1、SHA-256 与 SHA-512。',
+                l10n.hashEmptyHint,
                 style: textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),

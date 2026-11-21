@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/formatters.dart';
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class TimestampPage extends StatefulWidget {
@@ -51,7 +52,7 @@ class _TimestampPageState extends State<TimestampPage> {
     if (value == null) {
       setState(() {
         _parsedTime = null;
-        _parseError = '请输入整数时间戳';
+        _parseError = AppL10n.current.timestampErrorNotInteger;
       });
       return;
     }
@@ -65,7 +66,7 @@ class _TimestampPageState extends State<TimestampPage> {
     } catch (_) {
       setState(() {
         _parsedTime = null;
-        _parseError = '时间戳超出可表示范围';
+        _parseError = AppL10n.current.timestampErrorOutOfRange;
       });
     }
   }
@@ -96,14 +97,15 @@ class _TimestampPageState extends State<TimestampPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final seconds = _now.millisecondsSinceEpoch ~/ 1000;
     final parsed = _parsedTime;
 
     return ToolPage(
-      title: '时间戳转换',
-      subtitle: 'Unix 时间戳与本地、UTC 时间互转',
+      title: l10n.timestampPageTitle,
+      subtitle: l10n.timestampPageSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -113,7 +115,7 @@ class _TimestampPageState extends State<TimestampPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '当前时间',
+                  l10n.timestampCurrentTime,
                   style: textTheme.labelLarge?.copyWith(
                     color: scheme.onPrimaryContainer,
                   ),
@@ -133,16 +135,13 @@ class _TimestampPageState extends State<TimestampPage> {
                   ),
                 ),
                 const Divider(height: 28),
+                CopyableValue(label: l10n.timestampSeconds, value: '$seconds'),
                 CopyableValue(
-                  label: '秒级时间戳',
-                  value: '$seconds',
-                ),
-                CopyableValue(
-                  label: '毫秒级时间戳',
+                  label: l10n.timestampMilliseconds,
                   value: '${_now.millisecondsSinceEpoch}',
                 ),
                 CopyableValue(
-                  label: 'UTC 时间（ISO 8601）',
+                  label: l10n.timestampUtcIso,
                   value: _now.toUtc().toIso8601String(),
                 ),
               ],
@@ -153,21 +152,21 @@ class _TimestampPageState extends State<TimestampPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('时间戳 → 日期时间', style: textTheme.titleSmall),
+                Text(l10n.timestampToDateTime, style: textTheme.titleSmall),
                 const SizedBox(height: 12),
                 TextField(
                   controller: _timestampInput,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: '时间戳',
-                    hintText: '支持秒级或毫秒级，自动识别',
+                    labelText: l10n.timestampLabel,
+                    hintText: l10n.timestampHint,
                     suffixIcon: TextButton(
                       onPressed: () {
                         final now = DateTime.now().millisecondsSinceEpoch;
                         _timestampInput.text = '$now';
                         _parseTimestamp('$now');
                       },
-                      child: const Text('当前'),
+                      child: Text(l10n.timestampNow),
                     ),
                   ),
                   onChanged: _parseTimestamp,
@@ -182,23 +181,23 @@ class _TimestampPageState extends State<TimestampPage> {
                   Column(
                     children: [
                       CopyableValue(
-                        label: '本地时间',
+                        label: l10n.timestampLocalTime,
                         value: formatDateTime(parsed),
                       ),
                       CopyableValue(
-                        label: 'UTC 时间',
+                        label: l10n.timestampUtcTime,
                         value: formatDateTime(parsed.toUtc()),
                         monospace: false,
                       ),
                       CopyableValue(
-                        label: 'ISO 8601',
+                        label: l10n.timestampIso8601,
                         value: parsed.toUtc().toIso8601String(),
                       ),
                     ],
                   )
                 else
                   Text(
-                    '输入时间戳后显示对应日期时间',
+                    l10n.timestampEmptyHint,
                     style: textTheme.bodySmall?.copyWith(
                       color: scheme.onSurfaceVariant,
                     ),
@@ -211,7 +210,7 @@ class _TimestampPageState extends State<TimestampPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('日期时间 → 时间戳', style: textTheme.titleSmall),
+                Text(l10n.timestampFromDateTime, style: textTheme.titleSmall),
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -224,17 +223,17 @@ class _TimestampPageState extends State<TimestampPage> {
                     FilledButton.tonalIcon(
                       onPressed: _pickDateTime,
                       icon: const Icon(Icons.event),
-                      label: const Text('选择'),
+                      label: Text(l10n.timestampPick),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 CopyableValue(
-                  label: '秒级时间戳',
+                  label: l10n.timestampSeconds,
                   value: '${_pickedTime.millisecondsSinceEpoch ~/ 1000}',
                 ),
                 CopyableValue(
-                  label: '毫秒级时间戳',
+                  label: l10n.timestampMilliseconds,
                   value: '${_milliseconds(_pickedTime)}',
                 ),
               ],

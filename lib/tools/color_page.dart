@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../core/formatters.dart';
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class _Hsl {
@@ -22,8 +23,9 @@ class ColorPage extends StatefulWidget {
 
 class _ColorPageState extends State<ColorPage> {
   Color _color = const Color(0xFF00796B);
-  final TextEditingController _hexInput =
-      TextEditingController(text: '#00796B');
+  final TextEditingController _hexInput = TextEditingController(
+    text: '#00796B',
+  );
   String? _error;
 
   @override
@@ -63,7 +65,7 @@ class _ColorPageState extends State<ColorPage> {
   void _onHexChanged(String raw) {
     final parsed = _parseHex(raw);
     if (parsed == null) {
-      setState(() => _error = '请输入有效的 HEX 颜色，如 #3A7BD5');
+      setState(() => _error = AppL10n.current.colorErrorInvalidHex);
       return;
     }
     setState(() {
@@ -113,29 +115,33 @@ class _ColorPageState extends State<ColorPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final previewScheme = ColorScheme.fromSeed(
       seedColor: _color,
       brightness: Theme.of(context).brightness,
     );
-    final onColor = ThemeData.estimateBrightnessForColor(_color) ==
-            Brightness.dark
+    final onColor =
+        ThemeData.estimateBrightnessForColor(_color) == Brightness.dark
         ? Colors.white
         : Colors.black;
 
     final previewSwatches = <({String label, Color color})>[
-      (label: '主色', color: previewScheme.primary),
-      (label: '次色', color: previewScheme.secondary),
-      (label: '第三色', color: previewScheme.tertiary),
-      (label: '容器色', color: previewScheme.primaryContainer),
-      (label: '表面', color: previewScheme.surface),
-      (label: '强调表面', color: previewScheme.surfaceContainerHigh),
+      (label: l10n.colorSwatchPrimary, color: previewScheme.primary),
+      (label: l10n.colorSwatchSecondary, color: previewScheme.secondary),
+      (label: l10n.colorSwatchTertiary, color: previewScheme.tertiary),
+      (label: l10n.colorSwatchContainer, color: previewScheme.primaryContainer),
+      (label: l10n.colorSwatchSurface, color: previewScheme.surface),
+      (
+        label: l10n.colorSwatchSurfaceHigh,
+        color: previewScheme.surfaceContainerHigh,
+      ),
     ];
 
     return ToolPage(
-      title: '颜色工具',
-      subtitle: 'HEX / RGB / HSL 互转与 Material You 配色',
+      title: l10n.colorPageTitle,
+      subtitle: l10n.colorPageSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -163,11 +169,11 @@ class _ColorPageState extends State<ColorPage> {
                 TextField(
                   controller: _hexInput,
                   decoration: InputDecoration(
-                    labelText: 'HEX 颜色',
+                    labelText: l10n.colorHexLabel,
                     hintText: '#RRGGBB',
                     errorText: _error,
                     suffixIcon: IconButton(
-                      tooltip: '复制',
+                      tooltip: l10n.commonCopy,
                       icon: const Icon(Icons.copy_rounded, size: 20),
                       onPressed: () => copyText(context, _hexValue),
                     ),
@@ -185,31 +191,28 @@ class _ColorPageState extends State<ColorPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('调整通道', style: textTheme.titleSmall),
+                Text(l10n.colorChannelAdjust, style: textTheme.titleSmall),
                 const SizedBox(height: 8),
                 _ChannelSlider(
                   label: 'R',
                   value: _red,
                   color: const Color(0xFFE53935),
-                  onChanged: (value) => _updateColor(
-                    Color.fromARGB(255, value, _green, _blue),
-                  ),
+                  onChanged: (value) =>
+                      _updateColor(Color.fromARGB(255, value, _green, _blue)),
                 ),
                 _ChannelSlider(
                   label: 'G',
                   value: _green,
                   color: const Color(0xFF43A047),
-                  onChanged: (value) => _updateColor(
-                    Color.fromARGB(255, _red, value, _blue),
-                  ),
+                  onChanged: (value) =>
+                      _updateColor(Color.fromARGB(255, _red, value, _blue)),
                 ),
                 _ChannelSlider(
                   label: 'B',
                   value: _blue,
                   color: const Color(0xFF1E88E5),
-                  onChanged: (value) => _updateColor(
-                    Color.fromARGB(255, _red, _green, value),
-                  ),
+                  onChanged: (value) =>
+                      _updateColor(Color.fromARGB(255, _red, _green, value)),
                 ),
               ],
             ),
@@ -219,10 +222,10 @@ class _ColorPageState extends State<ColorPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('配色预览', style: textTheme.titleSmall),
+                Text(l10n.colorPreviewTitle, style: textTheme.titleSmall),
                 const SizedBox(height: 4),
                 Text(
-                  '基于当前颜色生成的 Material You 色调',
+                  l10n.colorPreviewSubtitle,
                   style: textTheme.bodySmall?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
@@ -243,8 +246,9 @@ class _ColorPageState extends State<ColorPage> {
                               color: swatch.color,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: scheme.outlineVariant
-                                    .withValues(alpha: 0.5),
+                                color: scheme.outlineVariant.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
                             ),
                           ),
@@ -300,7 +304,11 @@ class _ChannelSlider extends StatelessWidget {
         ),
         SizedBox(
           width: 36,
-          child: Text('$value', textAlign: TextAlign.end, style: textTheme.bodyMedium),
+          child: Text(
+            '$value',
+            textAlign: TextAlign.end,
+            style: textTheme.bodyMedium,
+          ),
         ),
       ],
     );

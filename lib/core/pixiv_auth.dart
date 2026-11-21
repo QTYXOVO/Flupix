@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/l10n.dart';
+
 /// pixiv 官方 App 使用的 OAuth 客户端参数（与 pixivpy 保持一致）。
 const String pixivClientId = 'MOBrBDS8blbauoSck0ZfDbtuzpyT';
 const String pixivClientSecret = 'lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj';
@@ -62,11 +64,11 @@ class PixivUser {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'account': account,
-        'profile_image_urls': {'px_100x100': avatarUrl},
-      };
+    'id': id,
+    'name': name,
+    'account': account,
+    'profile_image_urls': {'px_100x100': avatarUrl},
+  };
 }
 
 class PixivToken {
@@ -105,12 +107,12 @@ class PixivToken {
   }
 
   Map<String, dynamic> toJson() => {
-        'access_token': accessToken,
-        'refresh_token': refreshToken,
-        'expires_in': expiresIn,
-        'obtained_at': obtainedAt.millisecondsSinceEpoch,
-        if (user != null) 'user': user!.toJson(),
-      };
+    'access_token': accessToken,
+    'refresh_token': refreshToken,
+    'expires_in': expiresIn,
+    'obtained_at': obtainedAt.millisecondsSinceEpoch,
+    if (user != null) 'user': user!.toJson(),
+  };
 
   /// 由接口响应构造，同时记录获取时间。
   factory PixivToken.fromResponse(Map<String, dynamic> json) {
@@ -162,8 +164,7 @@ class PixivAuth {
   String? proxy;
 
   http.Client _buildClient() {
-    final inner = HttpClient()
-      ..connectionTimeout = const Duration(seconds: 20);
+    final inner = HttpClient()..connectionTimeout = const Duration(seconds: 20);
     final address = proxy?.trim();
     if (address != null && address.isNotEmpty) {
       inner.findProxy = (_) => 'PROXY $address';
@@ -171,9 +172,7 @@ class PixivAuth {
     return IOClient(inner);
   }
 
-  Future<Map<String, dynamic>> _requestToken(
-    Map<String, String> extra,
-  ) async {
+  Future<Map<String, dynamic>> _requestToken(Map<String, String> extra) async {
     final client = _buildClient();
     http.Response response;
     try {
@@ -197,29 +196,35 @@ class PixivAuth {
           .timeout(const Duration(seconds: 30));
     } on SocketException catch (error) {
       final reason = error.osError?.message ?? error.message;
-      throw PixivAuthException(
-        '无法连接 pixiv 服务器（$reason）。'
-        'oauth.secure.pixiv.net 在中国大陆通常无法直连，请先配置代理。',
-      );
+      throw PixivAuthException(AppL10n.current.pixivConnectionFailed(reason));
     } on TimeoutException {
-      throw PixivAuthException('请求超时，请检查网络状态或代理地址是否正确。');
+      throw PixivAuthException(AppL10n.current.pixivTimeout);
     } on http.ClientException catch (error) {
       // IOClient 会把 SocketException 包装成 ClientException，这里单独还原提示。
       if (error.message.contains('SocketException')) {
         final address = proxy?.trim();
-        final target = (address == null || address.isEmpty) ? '当前为直连' : '当前代理 $address';
-        throw PixivAuthException('无法连接 pixiv 服务器（$target），请确认代理已开启且地址正确。');
+        final target = (address == null || address.isEmpty)
+            ? AppL10n.current.pixivDirectConnection
+            : AppL10n.current.pixivErrorWithAddress(address);
+        throw PixivAuthException(
+          AppL10n.current.pixivConnectionFailedWithTarget(target),
+        );
       }
-      throw PixivAuthException('网络请求失败：${error.message}');
+      throw PixivAuthException(
+        AppL10n.current.pixivNetworkError(error.message),
+      );
     } finally {
       client.close();
     }
 
     Map<String, dynamic> json;
     try {
-      json = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      json =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     } catch (_) {
-      throw PixivAuthException('服务器返回了无法解析的内容（HTTP ${response.statusCode}）');
+      throw PixivAuthException(
+        AppL10n.current.pixivInvalidResponse(response.statusCode),
+      );
     }
 
     final hasError = json['has_error'] == true;
@@ -302,8 +307,8 @@ Future<String?> readSystemProxy() async {
       'ProxyServer',
     ]);
     if (server.exitCode != 0) return null;
-    final match =
-        RegExp(r'ProxyServer\s+REG_SZ\s+(.+)').firstMatch(server.stdout.toString());
+    final match = RegExp(r'ProxyServer\s+REG_SZ\s+(.+)')
+        .firstMatch(server.stdout.toString());
     final raw = match?.group(1)?.trim();
     if (raw == null || raw.isEmpty) return null;
 
@@ -313,8 +318,9 @@ Future<String?> readSystemProxy() async {
       for (final part in value.split(';')) {
         final index = part.indexOf('=');
         if (index <= 0) continue;
-        map[part.substring(0, index).trim().toLowerCase()] =
-            part.substring(index + 1).trim();
+        map[part.substring(0, index).trim().toLowerCase()] = part
+            .substring(index + 1)
+            .trim();
       }
       value = map['https'] ?? map['http'] ?? '';
     }

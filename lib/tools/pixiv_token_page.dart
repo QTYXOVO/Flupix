@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../core/formatters.dart';
 import '../core/pixiv_auth.dart';
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 import 'pixiv_login_page.dart';
 
@@ -20,7 +21,6 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
   final PixivAuth _auth = PixivAuth();
   final PixivTokenStore _store = PixivTokenStore();
   final PixivProxyStore _proxyStore = PixivProxyStore();
-  final TextEditingController _proxyController = TextEditingController();
 
   PixivToken? _token;
   Timer? _ticker;
@@ -44,7 +44,6 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
   @override
   void dispose() {
     _ticker?.cancel();
-    _proxyController.dispose();
     super.dispose();
   }
 
@@ -57,30 +56,9 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
     if (!mounted) return;
     setState(() {
       _token = token;
-      _proxyController.text = proxy ?? '';
       _auth.proxy = proxy;
       _loading = false;
     });
-  }
-
-  Future<void> _applyProxy() async {
-    final address = _proxyController.text.trim();
-    _auth.proxy = address.isEmpty ? null : address;
-    await _proxyStore.save(address);
-    if (!mounted) return;
-    FocusScope.of(context).unfocus();
-    _notify(address.isEmpty ? '已切换为直连' : '代理已保存：$address');
-  }
-
-  Future<void> _useSystemProxy() async {
-    final proxy = await readSystemProxy();
-    if (!mounted) return;
-    if (proxy == null) {
-      _notify('未检测到已启用的系统代理，请先开启代理软件', error: true);
-      return;
-    }
-    setState(() => _proxyController.text = proxy);
-    await _applyProxy();
   }
 
   void _notify(String message, {bool error = false}) {
@@ -92,6 +70,7 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
 
   Future<void> _login() async {
     if (_busy) return;
+    final l10n = context.l10n;
     setState(() {
       _busy = true;
       _message = null;
@@ -104,10 +83,13 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
         ),
       );
       if (code == null) {
-        _notify('已取消登录');
+        _notify(l10n.pixivLoginCancelled);
         return;
       }
-      final token = await _auth.exchangeCode(code: code, verifier: pkce.verifier);
+      final token = await _auth.exchangeCode(
+        code: code,
+        verifier: pkce.verifier,
+      );
       await _store.save(token);
       if (!mounted) return;
       setState(() {
@@ -115,11 +97,11 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
         _showAccess = false;
         _showRefresh = false;
       });
-      _notify('登录成功，已获取 Token');
+      _notify(l10n.pixivLoginSuccess);
     } on PixivAuthException catch (error) {
       _notify(error.message, error: true);
     } catch (error) {
-      _notify('登录失败：$error', error: true);
+      _notify(l10n.pixivLoginFailed('$error'), error: true);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -128,6 +110,7 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
   Future<void> _refresh() async {
     final token = _token;
     if (token == null || _busy) return;
+    final l10n = context.l10n;
     setState(() {
       _busy = true;
       _message = null;
@@ -137,30 +120,31 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
       await _store.save(refreshed);
       if (!mounted) return;
       setState(() => _token = refreshed);
-      _notify('Token 已刷新');
+      _notify(l10n.pixivTokenRefreshed);
     } on PixivAuthException catch (error) {
       _notify(error.message, error: true);
     } catch (error) {
-      _notify('刷新失败：$error', error: true);
+      _notify(l10n.pixivRefreshFailed('$error'), error: true);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
   }
 
   Future<void> _clear() async {
+    final l10n = context.l10n;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('清除本地数据'),
-        content: const Text('将删除本机保存的 access_token 与 refresh_token，之后需要重新登录。'),
+        title: Text(l10n.pixivClearDataTitle),
+        content: Text(l10n.pixivClearDataBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(l10n.commonCancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('清除'),
+            child: Text(l10n.pixivClearAction),
           ),
         ],
       ),
@@ -174,11 +158,12 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
       _showAccess = false;
       _showRefresh = false;
     });
-    _notify('已清除本地 Token');
+    _notify(l10n.pixivTokenCleared);
   }
 
   Future<void> _fetchCookie() async {
     if (_busy) return;
+    final l10n = context.l10n;
     setState(() => _busy = true);
     try {
       final session = await Navigator.of(context).push<String>(
@@ -187,7 +172,7 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
       if (!mounted) return;
       if (session == null) return;
       setState(() => _phpSessionId = session);
-      _notify('已获取 PHPSESSID');
+      _notify(l10n.pixivPhpSessionObtained);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -200,25 +185,29 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
   }
 
   String get _expiryLabel {
+    final l10n = context.l10n;
     final token = _token;
     if (token == null) return '';
-    if (token.isExpired) return '已过期，请刷新';
+    if (token.isExpired) return l10n.pixivTokenExpired;
     final remaining = token.remaining;
     final hours = remaining.inHours;
     final minutes = remaining.inMinutes % 60;
     final seconds = remaining.inSeconds % 60;
-    return '剩余 ${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}';
+    return l10n.pixivTokenRemaining(
+      '${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(seconds)}',
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final token = _token;
 
     return ToolPage(
-      title: 'Pixiv Token',
-      subtitle: 'OAuth 登录获取与刷新令牌',
+      title: l10n.toolPixivTitle,
+      subtitle: l10n.pixivTokenSubtitle,
       child: _loading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
@@ -237,7 +226,9 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                   Row(
                     children: [
                       Icon(
-                        _isError ? Icons.error_outline : Icons.check_circle_outline,
+                        _isError
+                            ? Icons.error_outline
+                            : Icons.check_circle_outline,
                         size: 18,
                         color: _isError ? scheme.error : scheme.primary,
                       ),
@@ -246,7 +237,9 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                         child: Text(
                           _message!,
                           style: textTheme.bodySmall?.copyWith(
-                            color: _isError ? scheme.error : scheme.onSurfaceVariant,
+                            color: _isError
+                                ? scheme.error
+                                : scheme.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -261,17 +254,23 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                       children: [
                         Row(
                           children: [
-                            Text('令牌', style: textTheme.titleSmall),
+                            Text(
+                              l10n.pixivTokenSection,
+                              style: textTheme.titleSmall,
+                            ),
                             const Spacer(),
                             IconButton(
                               visualDensity: VisualDensity.compact,
-                              tooltip: '复制全部',
+                              tooltip: l10n.pixivTokenCopyAll,
                               onPressed: () => copyText(
                                 context,
                                 'access_token: ${token.accessToken}\n'
-                                    'refresh_token: ${token.refreshToken}',
+                                'refresh_token: ${token.refreshToken}',
                               ),
-                              icon: const Icon(Icons.copy_all_rounded, size: 20),
+                              icon: const Icon(
+                                Icons.copy_all_rounded,
+                                size: 20,
+                              ),
                             ),
                           ],
                         ),
@@ -297,77 +296,18 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                     ),
                   ),
                 ],
-                if (Platform.isWindows) ...[
-                  const SizedBox(height: 16),
-                  SectionCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.vpn_lock_outlined,
-                              size: 18,
-                              color: scheme.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 6),
-                            Text('网络代理', style: textTheme.titleSmall),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'pixiv 认证接口在国内通常无法直连，可填写 HTTP 代理地址；'
-                          '留空表示直连。',
-                          style: textTheme.bodySmall?.copyWith(
-                            color: scheme.onSurfaceVariant,
-                            height: 1.5,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: _proxyController,
-                          keyboardType: TextInputType.url,
-                          decoration: const InputDecoration(
-                            labelText: '代理地址',
-                            hintText: '127.0.0.1:7890',
-                            prefixIcon: Icon(Icons.lan_outlined),
-                          ),
-                          onSubmitted: (_) => _applyProxy(),
-                        ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            FilledButton.tonalIcon(
-                              onPressed: _applyProxy,
-                              icon: const Icon(Icons.check_rounded),
-                              label: const Text('保存代理'),
-                            ),
-                            TextButton.icon(
-                              onPressed: _useSystemProxy,
-                              icon: const Icon(
-                                Icons.settings_ethernet_rounded,
-                                size: 18,
-                              ),
-                              label: const Text('读取系统代理'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
                 const SizedBox(height: 16),
                 SectionCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Web 端 Cookie', style: textTheme.titleSmall),
+                      Text(
+                        l10n.pixivWebCookieTitle,
+                        style: textTheme.titleSmall,
+                      ),
                       const SizedBox(height: 4),
                       Text(
-                        'Pixeval 等使用 WebAPI 的工具需要 PHPSESSID，'
-                        '需在 pixiv 网页版登录后读取。',
+                        l10n.pixivWebCookieDesc,
                         style: textTheme.bodySmall?.copyWith(
                           color: scheme.onSurfaceVariant,
                         ),
@@ -383,7 +323,9 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                         onPressed: _busy ? null : _fetchCookie,
                         icon: const Icon(Icons.cookie_outlined),
                         label: Text(
-                          _phpSessionId == null ? '获取 pixiv.net Cookie' : '重新获取',
+                          _phpSessionId == null
+                              ? l10n.pixivFetchCookie
+                              : l10n.pixivFetchCookieAgain,
                         ),
                       ),
                     ],
@@ -404,7 +346,7 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            '安全提示',
+                            l10n.pixivSecurityTitle,
                             style: textTheme.labelLarge?.copyWith(
                               color: scheme.onSurfaceVariant,
                             ),
@@ -413,8 +355,7 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'access_token 与 refresh_token 等同于账号凭证，请勿分享或提交到公开仓库。'
-                        '令牌仅保存在本机，除 pixiv 官方域名外不会向任何服务器发送数据。',
+                        l10n.pixivSecurityBody,
                         style: textTheme.bodySmall?.copyWith(
                           color: scheme.onSurfaceVariant,
                           height: 1.5,
@@ -448,6 +389,7 @@ class _AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final user = token?.user;
@@ -468,7 +410,9 @@ class _AccountCard extends StatelessWidget {
                     Text(
                       user?.name.isNotEmpty == true
                           ? user!.name
-                          : (token == null ? '未登录' : '已登录'),
+                          : (token == null
+                                ? l10n.pixivNotLoggedIn
+                                : l10n.pixivLoggedIn),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: textTheme.titleMedium?.copyWith(
@@ -479,7 +423,7 @@ class _AccountCard extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       user == null
-                          ? '登录后可获取 access_token 与 refresh_token'
+                          ? l10n.pixivLoginHint
                           : '@${user.account} · UID ${user.id}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -536,7 +480,9 @@ class _AccountCard extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.login_rounded),
-                  label: Text(busy ? '处理中…' : '登录 pixiv'),
+                  label: Text(
+                    busy ? l10n.pixivProcessing : l10n.pixivLoginTitle,
+                  ),
                 )
               else ...[
                 FilledButton.icon(
@@ -548,17 +494,19 @@ class _AccountCard extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.refresh_rounded),
-                  label: Text(busy ? '处理中…' : '刷新 Token'),
+                  label: Text(
+                    busy ? l10n.pixivProcessing : l10n.pixivRefreshTokenButton,
+                  ),
                 ),
                 FilledButton.tonalIcon(
                   onPressed: busy ? null : onLogin,
                   icon: const Icon(Icons.swap_horiz_rounded),
-                  label: const Text('重新登录'),
+                  label: Text(l10n.pixivReloginButton),
                 ),
                 TextButton.icon(
                   onPressed: busy ? null : onClear,
                   icon: const Icon(Icons.delete_outline, size: 18),
-                  label: const Text('清除'),
+                  label: Text(l10n.pixivClearAction),
                 ),
               ],
             ],
@@ -622,6 +570,7 @@ class _TokenBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     return Column(
@@ -638,17 +587,19 @@ class _TokenBlock extends StatelessWidget {
             const Spacer(),
             IconButton(
               visualDensity: VisualDensity.compact,
-              tooltip: visible ? '隐藏' : '显示',
+              tooltip: visible ? l10n.pixivTokenHide : l10n.pixivTokenShow,
               onPressed: onToggle,
               icon: Icon(
-                visible ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                visible
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
                 size: 18,
                 color: scheme.onSurfaceVariant,
               ),
             ),
             IconButton(
               visualDensity: VisualDensity.compact,
-              tooltip: '复制',
+              tooltip: l10n.commonCopy,
               onPressed: () => copyText(context, value),
               icon: Icon(
                 Icons.copy_rounded,

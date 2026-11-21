@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 class QrCodePage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _QrCodePageState extends State<QrCodePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final content = _input.text.trim();
@@ -34,13 +36,15 @@ class _QrCodePageState extends State<QrCodePage> {
     final candidate = scheme.primary;
     final themeForeground =
         ThemeData.estimateBrightnessForColor(candidate) == Brightness.dark
-            ? candidate
-            : scheme.onPrimary;
-    final foreground = _useThemeColor ? themeForeground : const Color(0xFF101010);
+        ? candidate
+        : scheme.onPrimary;
+    final foreground = _useThemeColor
+        ? themeForeground
+        : const Color(0xFF101010);
 
     return ToolPage(
-      title: '二维码生成',
-      subtitle: '输入文本即可生成可扫描的二维码',
+      title: l10n.toolQrTitle,
+      subtitle: l10n.qrSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -51,13 +55,13 @@ class _QrCodePageState extends State<QrCodePage> {
               maxLines: 5,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(
-                labelText: '二维码内容',
-                hintText: '支持文本、网址、联系方式等',
+                labelText: l10n.qrContentLabel,
+                hintText: l10n.qrContentHint,
                 alignLabelWithHint: true,
                 suffixIcon: _input.text.isEmpty
                     ? null
                     : IconButton(
-                        tooltip: '清空',
+                        tooltip: l10n.commonClear,
                         icon: const Icon(Icons.close),
                         onPressed: () {
                           _input.clear();
@@ -91,8 +95,8 @@ class _QrCodePageState extends State<QrCodePage> {
                         const SizedBox(height: 12),
                         Text(
                           content.isEmpty
-                              ? '输入内容后生成二维码'
-                              : '内容过长（${utf8.encode(content).length} 字节），请精简到约 1800 字节以内',
+                              ? l10n.qrEmptyTip
+                              : l10n.qrTooLong(utf8.encode(content).length),
                           textAlign: TextAlign.center,
                           style: textTheme.bodyMedium?.copyWith(
                             color: Colors.black54,
@@ -105,8 +109,7 @@ class _QrCodePageState extends State<QrCodePage> {
                     child: LayoutBuilder(
                       builder: (context, constraints) {
                         final maxWidth = constraints.maxWidth - 8;
-                        final qrSize =
-                            _size > maxWidth ? maxWidth : _size;
+                        final qrSize = _size > maxWidth ? maxWidth : _size;
                         return QrImageView(
                           data: content,
                           version: QrVersions.auto,
@@ -130,7 +133,9 @@ class _QrCodePageState extends State<QrCodePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                content.isEmpty ? '暂无内容' : '${content.runes.length} 个字符',
+                content.isEmpty
+                    ? l10n.commonEmpty
+                    : l10n.qrCharCount(content.runes.length),
                 style: textTheme.bodySmall?.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
@@ -138,9 +143,10 @@ class _QrCodePageState extends State<QrCodePage> {
               const SizedBox(width: 8),
               if (content.isNotEmpty)
                 TextButton.icon(
-                  onPressed: () => copyText(context, content, message: '内容已复制'),
+                  onPressed: () =>
+                      copyText(context, content, message: l10n.qrCopiedContent),
                   icon: const Icon(Icons.copy_rounded, size: 18),
-                  label: const Text('复制内容'),
+                  label: Text(l10n.qrCopyContent),
                 ),
             ],
           ),
@@ -151,10 +157,10 @@ class _QrCodePageState extends State<QrCodePage> {
               children: [
                 Row(
                   children: [
-                    Text('二维码尺寸', style: textTheme.titleSmall),
+                    Text(l10n.qrSize, style: textTheme.titleSmall),
                     const Spacer(),
                     Text(
-                      '${_size.round()} px',
+                      l10n.qrSizePx(_size.round()),
                       style: textTheme.bodyMedium?.copyWith(
                         color: scheme.onSurfaceVariant,
                       ),
@@ -172,8 +178,8 @@ class _QrCodePageState extends State<QrCodePage> {
                 const Divider(height: 20),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('使用主题色'),
-                  subtitle: const Text('开启后二维码模块使用当前主题主色'),
+                  title: Text(l10n.qrUseThemeColor),
+                  subtitle: Text(l10n.qrUseThemeColorHint),
                   value: _useThemeColor,
                   onChanged: (value) => setState(() => _useThemeColor = value),
                 ),

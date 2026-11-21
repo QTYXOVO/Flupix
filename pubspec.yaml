@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -41,6 +44,15 @@ dependencies:
   flutter_inappwebview: ^6.1.5
   flutter_markdown_plus: ^1.0.12
   file_picker: ^13.3.3
+  html: ^0.15.5
+  photo_view: ^0.15.0
+  path_provider: ^2.1.5
+  audioplayers: ^6.8.1
+  # 本地副本仅保留 Android 实现：Windows 端改用系统 ffmpeg，避免构建时下载运行时。
+  ffmpeg_kit_flutter_new_audio:
+    path: third_party/ffmpeg_kit_flutter_new_audio
+  package_info_plus: ^10.2.2
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:
@@ -58,11 +70,16 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/sounds/
+    - assets/app_icon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

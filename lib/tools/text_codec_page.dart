@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
 enum _CodecType { base64, url }
@@ -59,20 +60,21 @@ class _TextCodecPageState extends State<TextCodecPage> {
       _output.text = '';
       _error = _direction == _CodecDirection.decode
           ? (_type == _CodecType.base64
-              ? 'Base64 内容无效，无法解码'
-              : 'URL 编码格式无效，无法解码')
-          : '转换失败，请检查输入内容';
+                ? context.l10n.textCodecInvalidBase64
+                : context.l10n.textCodecInvalidUrl)
+          : context.l10n.textCodecConvertFailed;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return ToolPage(
-      title: '文本编解码',
-      subtitle: 'Base64 与 URL 编码互转',
+      title: l10n.textCodecTitle,
+      subtitle: l10n.textCodecSubtitle,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
         children: [
@@ -105,14 +107,14 @@ class _TextCodecPageState extends State<TextCodecPage> {
                 const SizedBox(height: 10),
                 SegmentedButton<_CodecDirection>(
                   showSelectedIcon: false,
-                  segments: const [
+                  segments: [
                     ButtonSegment(
                       value: _CodecDirection.encode,
-                      label: Text('编码'),
+                      label: Text(l10n.textCodecEncode),
                     ),
                     ButtonSegment(
                       value: _CodecDirection.decode,
-                      label: Text('解码'),
+                      label: Text(l10n.textCodecDecode),
                     ),
                   ],
                   selected: {_direction},
@@ -130,14 +132,14 @@ class _TextCodecPageState extends State<TextCodecPage> {
                   maxLines: 6,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    labelText: '输入内容',
+                    labelText: l10n.textCodecInputLabel,
                     hintText: _direction == _CodecDirection.encode
-                        ? '输入需要编码的文本'
-                        : '粘贴需要解码的内容',
+                        ? l10n.textCodecInputEncodeHint
+                        : l10n.textCodecInputDecodeHint,
                     suffixIcon: _input.text.isEmpty
                         ? null
                         : IconButton(
-                            tooltip: '清空',
+                            tooltip: l10n.commonClear,
                             icon: const Icon(Icons.close),
                             onPressed: () {
                               _input.clear();
@@ -149,7 +151,7 @@ class _TextCodecPageState extends State<TextCodecPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${_input.text.runes.length} 个字符',
+                  l10n.textCodecCharCount(_input.text.runes.length),
                   style: textTheme.bodySmall?.copyWith(
                     color: scheme.onSurfaceVariant,
                   ),
@@ -165,11 +167,14 @@ class _TextCodecPageState extends State<TextCodecPage> {
               children: [
                 Row(
                   children: [
-                    Text('转换结果', style: textTheme.labelLarge),
+                    Text(
+                      l10n.textCodecResultTitle,
+                      style: textTheme.labelLarge,
+                    ),
                     const Spacer(),
                     IconButton(
                       visualDensity: VisualDensity.compact,
-                      tooltip: '复制结果',
+                      tooltip: l10n.textCodecCopyResult,
                       onPressed: _output.text.isEmpty
                           ? null
                           : () => copyText(context, _output.text),
@@ -179,7 +184,9 @@ class _TextCodecPageState extends State<TextCodecPage> {
                 ),
                 const SizedBox(height: 4),
                 SelectableText(
-                  _output.text.isEmpty ? '结果会显示在这里' : _output.text,
+                  _output.text.isEmpty
+                      ? l10n.textCodecResultPlaceholder
+                      : _output.text,
                   style: textTheme.bodyLarge?.copyWith(
                     fontFamily: 'monospace',
                     color: _output.text.isEmpty
