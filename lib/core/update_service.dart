@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 
@@ -18,6 +20,7 @@ class AppRelease {
     required this.notes,
     required this.releaseUrl,
     this.downloadUrl,
+    this.sha256Url,
   });
 
   /// 去掉 `v` 前缀后的版本号，例如 `1.2.0`。
@@ -33,6 +36,9 @@ class AppRelease {
 
   /// 与当前平台匹配的下载地址，未找到时为 null。
   final Uri? downloadUrl;
+
+  /// 安装包的 SHA-256 校验文件地址，未提供时为 null。
+  final Uri? sha256Url;
 }
 
 class UpdateCheckResult {
@@ -139,19 +145,23 @@ class UpdateService {
         ? releasesPage
         : Uri.tryParse(htmlUrl) ?? releasesPage;
 
+    final picked = _pickAssets(assets);
     return AppRelease(
       version: version,
       tagName: tagName,
       title: (decoded['name'] as String? ?? '').trim(),
       notes: (decoded['body'] as String? ?? '').trim(),
       releaseUrl: releaseUrl,
-      downloadUrl: _pickDownloadUrl(assets),
+      downloadUrl: picked.downloadUrl,
+      sha256Url: picked.sha256Url,
     );
   }
 
   void close() => _client.close();
 
-  Uri? _pickDownloadUrl(Iterable<Map<String, dynamic>> assets) {
+  ({Uri? downloadUrl, Uri? sha256Url}) _pickAssets(
+    Iterable<Map<String, dynamic>> assets,
+  ) {
     final candidates = <(String, Uri)>[];
     for (final asset in assets) {
       final name = (asset['name'] as String? ?? '').toLowerCase();
@@ -160,20 +170,127 @@ class UpdateService {
       candidates.add((name, url));
     }
 
-    String? best;
     if (Platform.isAndroid) {
-      best = _firstMatching(candidates, (name) => name.contains('android') && name.endsWith('.apk')) ??
+      final abi = _androidAbiTag();
+      final best = _firstMatching(
+            candidates,
+            (name) => name.contains('android') && name.contains(abi) && name.endsWith('.apk'),
+          ) ??
+          _firstMatching(
+            candidates,
+            (name) => name.contains('android') && name.contains('universal') && name.endsWith('.apk'),
+          ) ??
+          _firstMatching(candidates, (name) => name.contains('android') && name.endsWith('.apk')) ??
           _firstMatching(candidates, (name) => name.endsWith('.apk'));
-    } else if (Platform.isWindows) {
-      best = _firstMatching(candidates, (name) => name.contains('windows') && name.endsWith('.zip')) ??
-          _firstMatching(candidates, (name) => name.endsWith('.zip'));
+      return (downloadUrl: best?.$2, sha256Url: null);
     }
-    return best == null ? null : Uri.parse(best);
+
+    if (Platform.isWindows) {
+      final setup = _firstMatching(
+            candidates,
+            (name) => name.contains('windows') && name.contains('setup') && name.endsWith('.exe'),
+          ) ??
+          _firstMatching(candidates, (name) => name.endsWith('.exe'));
+      if (setup != null) {
+        final hash = _firstMatching(candidates, (name) => name == '${setup.$1}.sha256');
+        return (downloadUrl: setup.$2, sha256Url: hash?.$2);
+      }
+      final zip = _firstMatching(
+            candidates,
+            (name) => name.contains('windows') && name.endsWith('.zip'),
+          ) ??
+          _firstMatching(candidates, (name) => name.endsWith('.zip'));
+      return (downloadUrl: zip?.$2, sha256Url: null);
+    }
+
+    return (downloadUrl: null, sha256Url: null);
   }
 
-  String? _firstMatching(List<(String, Uri)> candidates, bool Function(String) test) {
-    for (final (name, url) in candidates) {
-      if (test(name)) return url.toString();
+  /// 下载文件到 [target]，并通过 [onProgress] 汇报进度。
+  Future<void> downloadFile(
+    Uri url,
+    File target, {
+    void Function(int received, int? total)? onProgress,
+  }) async {
+    final request = http.Request('GET', url)
+      ..headers['User-Agent'] = 'Flupix-Updater';
+    final http.StreamedResponse response;
+    try {
+      response = await _client.send(request);
+    } on SocketException catch (error) {
+      throw UpdateCheckException('网络连接失败：${error.message}');
+    } on http.ClientException catch (error) {
+      throw UpdateCheckException('网络请求失败：${error.message}');
+    }
+    if (response.statusCode != 200) {
+      throw UpdateCheckException(
+        '下载失败：HTTP ${response.statusCode}',
+        statusCode: response.statusCode,
+      );
+    }
+
+    await target.parent.create(recursive: true);
+    final sink = target.openWrite();
+    var received = 0;
+    try {
+      await for (final chunk in response.stream) {
+        sink.add(chunk);
+        received += chunk.length;
+        onProgress?.call(received, response.contentLength);
+      }
+      await sink.flush();
+    } finally {
+      await sink.close();
+    }
+  }
+
+  /// 读取小体积文本资源（例如 SHA-256 校验文件）。
+  Future<String> fetchText(Uri url) async {
+    final http.Response response;
+    try {
+      response = await _client
+          .get(url, headers: const {'User-Agent': 'Flupix-Updater'})
+          .timeout(const Duration(seconds: 15));
+    } on TimeoutException {
+      throw const UpdateCheckException('请求超时');
+    } on SocketException catch (error) {
+      throw UpdateCheckException('网络连接失败：${error.message}');
+    } on http.ClientException catch (error) {
+      throw UpdateCheckException('网络请求失败：${error.message}');
+    }
+    if (response.statusCode != 200) {
+      throw UpdateCheckException(
+        'HTTP ${response.statusCode}',
+        statusCode: response.statusCode,
+      );
+    }
+    return utf8.decode(response.bodyBytes);
+  }
+
+  /// 计算文件 SHA-256。
+  Future<String> sha256OfFile(File file) async {
+    final digest = await sha256.bind(file.openRead()).first;
+    return digest.toString();
+  }
+
+  /// 当前设备 ABI 对应的 APK 文件名标记，与 CI 产物命名保持一致。
+  String _androidAbiTag() {
+    try {
+      final abi = Abi.current().toString();
+      if (abi == 'android_arm') return 'armeabi-v7a';
+      if (abi == 'android_x64') return 'x86_64';
+      return 'arm64-v8a';
+    } catch (_) {
+      return 'arm64-v8a';
+    }
+  }
+
+  (String, Uri)? _firstMatching(
+    List<(String, Uri)> candidates,
+    bool Function(String) test,
+  ) {
+    for (final candidate in candidates) {
+      if (test(candidate.$1)) return candidate;
     }
     return null;
   }

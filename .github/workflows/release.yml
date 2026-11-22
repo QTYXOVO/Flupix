@@ -75,7 +75,13 @@ jobs:
             echo "keyPassword=$KEY_PASSWORD"
           } > android/key.properties
 
-      - name: Build APK
+      - name: Build APK (split per ABI)
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          CODE: ${{ needs.prepare.outputs.code }}
+        run: flutter build apk --release --split-per-abi --build-name="$VERSION" --build-number="$CODE"
+
+      - name: Build universal APK
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
           CODE: ${{ needs.prepare.outputs.code }}
@@ -85,13 +91,17 @@ jobs:
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
+          for abi in armeabi-v7a arm64-v8a x86_64; do
+            cp "build/app/outputs/flutter-apk/app-${abi}-release.apk" \
+              "Flupix-${VERSION}-android-${abi}.apk"
+          done
           cp build/app/outputs/flutter-apk/app-release.apk \
-            "Flupix-${VERSION}-android.apk"
+            "Flupix-${VERSION}-android-universal.apk"
 
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: Flupix-*-android.apk
+          path: Flupix-*-android-*.apk
           if-no-files-found: error
 
   build-windows:
@@ -128,10 +138,35 @@ jobs:
           Compress-Archive -Path (Join-Path $releaseDir.FullName '*') `
             -DestinationPath "Flupix-$env:VERSION-windows-x64.zip"
 
+      - name: Build installer
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          CODE: ${{ needs.prepare.outputs.code }}
+        run: |
+          $iscc = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup -y --no-progress
+            $iscc = Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'
+          }
+          & $iscc "/DMyAppVersion=$env:VERSION" "/DMyAppBuild=$env:CODE" "installer\flupix.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup 编译失败" }
+
+      - name: Hash installer
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem dist -Filter 'Flupix-*-windows-x64-setup.exe' | Select-Object -First 1
+          if (-not $setup) { throw "未找到安装包" }
+          $hash = (Get-FileHash $setup.FullName -Algorithm SHA256).Hash.ToLower()
+          "$hash  $($setup.Name)" | Set-Content -NoNewline -Encoding ascii "$($setup.FullName).sha256"
+
       - uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: Flupix-*-windows-x64.zip
+          path: |
+            Flupix-*-windows-x64.zip
+            dist/Flupix-*-windows-x64-setup.exe
+            dist/Flupix-*-windows-x64-setup.exe.sha256
           if-no-files-found: error
 
   release:
@@ -145,13 +180,19 @@ jobs:
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/*
+          files: artifacts/**
           generate_release_notes: true
           name: Flupix ${{ github.ref_name }}
           body: |
             ## 下载
 
-            - **Android**：安装 `Flupix-*-android.apk`
-            - **Windows**：解压 `Flupix-*-windows-x64.zip`，运行 `flupix.exe`
+            - **Android**（按 CPU 架构选择）：
+              - `Flupix-*-android-arm64-v8a.apk`（绝大多数手机）
+              - `Flupix-*-android-armeabi-v7a.apk`（较旧的 32 位设备）
+              - `Flupix-*-android-x86_64.apk`（模拟器 / x86 设备）
+              - `Flupix-*-android-universal.apk`（通用包，不确定架构时使用，体积较大）
+            - **Windows**：
+              - `Flupix-*-windows-x64-setup.exe`（安装版，支持应用内静默升级）
+              - `Flupix-*-windows-x64.zip`（便携版，解压后运行 `flupix.exe`）
 
             本版本由 GitHub Actions 自动构建发布。

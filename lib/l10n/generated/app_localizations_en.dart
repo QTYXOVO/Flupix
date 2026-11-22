@@ -484,6 +484,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsUpdateDownload => 'Download';
 
   @override
+  String get settingsUpdateInstall => 'Download and install';
+
+  @override
+  String settingsUpdateDownloading(String version) {
+    return 'Downloading $version…';
+  }
+
+  @override
+  String get settingsUpdateInstalling => 'Download complete, installing…';
+
+  @override
+  String settingsUpdateFailed(String error) {
+    return 'Update failed: $error';
+  }
+
+  @override
   String get settingsUpdateOpenReleases => 'Open releases';
 
   @override

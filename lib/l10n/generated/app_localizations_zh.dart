@@ -461,6 +461,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsUpdateDownload => '前往下载';
 
   @override
+  String get settingsUpdateInstall => '下载并安装';
+
+  @override
+  String settingsUpdateDownloading(String version) {
+    return '正在下载 $version…';
+  }
+
+  @override
+  String get settingsUpdateInstalling => '下载完成，正在安装…';
+
+  @override
+  String settingsUpdateFailed(String error) {
+    return '更新失败：$error';
+  }
+
+  @override
   String get settingsUpdateOpenReleases => '打开发布页';
 
   @override

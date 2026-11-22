@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -169,17 +170,19 @@ class _SettingsPageState extends State<SettingsPage>
     await _saveProxy();
   }
 
+  Future<String?> _loadUpdateProxy() async {
+    if (!Platform.isWindows) return null;
+    return await _proxyStore.load() ??
+        await EhCookieStore.loadProxy() ??
+        await readSystemProxy();
+  }
+
   Future<void> _checkForUpdate() async {
     if (_checkingUpdate) return;
     setState(() => _checkingUpdate = true);
     UpdateService? service;
     try {
-      final proxy = Platform.isWindows
-          ? await _proxyStore.load() ??
-                await EhCookieStore.loadProxy() ??
-                await readSystemProxy()
-          : null;
-      service = UpdateService(proxy: proxy);
+      service = UpdateService(proxy: await _loadUpdateProxy());
       final current = _appVersion ?? '';
       final result = await service.checkForUpdate(
         current.isEmpty ? '0.0.0' : current,
@@ -222,6 +225,9 @@ class _SettingsPageState extends State<SettingsPage>
       builder: (dialogContext) {
         final scheme = Theme.of(dialogContext).colorScheme;
         final textTheme = Theme.of(dialogContext).textTheme;
+        final useInstaller =
+            Platform.isWindows &&
+            (release.downloadUrl?.path.toLowerCase().endsWith('.exe') ?? false);
         return AlertDialog(
           icon: const Icon(Icons.system_update_rounded),
           title: Text(l10n.settingsUpdateAvailableTitle(release.version)),
@@ -265,15 +271,102 @@ class _SettingsPageState extends State<SettingsPage>
             FilledButton.icon(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
-                _openReleaseUrl(release.downloadUrl ?? release.releaseUrl);
+                if (useInstaller) {
+                  _startWindowsUpdate(release);
+                } else {
+                  _openReleaseUrl(release.downloadUrl ?? release.releaseUrl);
+                }
               },
-              icon: const Icon(Icons.download_rounded, size: 18),
-              label: Text(l10n.settingsUpdateDownload),
+              icon: Icon(
+                useInstaller
+                    ? Icons.system_update_alt_rounded
+                    : Icons.download_rounded,
+                size: 18,
+              ),
+              label: Text(
+                useInstaller
+                    ? l10n.settingsUpdateInstall
+                    : l10n.settingsUpdateDownload,
+              ),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _startWindowsUpdate(AppRelease release) async {
+    final url = release.downloadUrl;
+    if (url == null) {
+      await _openReleaseUrl(release.releaseUrl);
+      return;
+    }
+
+    final progress = ValueNotifier<double?>(null);
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => PopScope(
+          canPop: false,
+          child: _UpdateProgressDialog(
+            version: release.version,
+            progress: progress,
+          ),
+        ),
+      ),
+    );
+
+    UpdateService? service;
+    try {
+      service = UpdateService(proxy: await _loadUpdateProxy());
+      final fileName = url.pathSegments.isEmpty
+          ? 'Flupix-setup.exe'
+          : url.pathSegments.last;
+      final dir = await Directory.systemTemp.createTemp('flupix_update_');
+      final installer = File('${dir.path}${Platform.pathSeparator}$fileName');
+      await service.downloadFile(
+        url,
+        installer,
+        onProgress: (received, total) {
+          if (total != null && total > 0) {
+            progress.value = received / total;
+          }
+        },
+      );
+      progress.value = 1;
+
+      final hashUrl = release.sha256Url;
+      if (hashUrl != null) {
+        final text = await service.fetchText(hashUrl);
+        final expected = text.trim().split(RegExp(r'\s+')).first.toLowerCase();
+        final actual = await service.sha256OfFile(installer);
+        if (expected.isNotEmpty && actual.toLowerCase() != expected) {
+          throw const UpdateCheckException('安装包校验失败，请重试');
+        }
+      }
+
+      await Process.start(
+        installer.path,
+        const [
+          '/VERYSILENT',
+          '/SUPPRESSMSGBOXES',
+          '/NORESTART',
+          '/CLOSEAPPLICATIONS',
+          '/RESTARTAPPLICATIONS',
+        ],
+        mode: ProcessStartMode.detached,
+      );
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      exit(0);
+    } catch (error) {
+      if (!mounted) return;
+      Navigator.of(context, rootNavigator: true).pop();
+      final message = error is UpdateCheckException ? error.message : '$error';
+      _notify(context.l10n.settingsUpdateFailed(message), error: true);
+    } finally {
+      service?.close();
+    }
   }
 
   Future<void> _openReleasesPage() =>
@@ -844,6 +937,41 @@ class _SeedSwatch extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _UpdateProgressDialog extends StatelessWidget {
+  const _UpdateProgressDialog({required this.version, required this.progress});
+
+  final String version;
+  final ValueNotifier<double?> progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(l10n.settingsUpdateDownloading(version)),
+      content: ValueListenableBuilder<double?>(
+        valueListenable: progress,
+        builder: (context, value, _) {
+          final installing = value != null && value >= 1;
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              LinearProgressIndicator(value: value),
+              const SizedBox(height: 12),
+              Text(
+                installing
+                    ? l10n.settingsUpdateInstalling
+                    : value == null
+                    ? '—'
+                    : '${(value * 100).round()}%',
+              ),
+            ],
+          );
+        },
       ),
     );
   }

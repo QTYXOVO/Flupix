@@ -143,6 +143,24 @@
   "settingsUpdateReleaseNotes": "What's new",
   "settingsUpdateNoNotes": "No release notes were provided for this version.",
   "settingsUpdateDownload": "Download",
+  "settingsUpdateInstall": "Download and install",
+  "settingsUpdateDownloading": "Downloading {version}…",
+  "@settingsUpdateDownloading": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateInstalling": "Download complete, installing…",
+  "settingsUpdateFailed": "Update failed: {error}",
+  "@settingsUpdateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsUpdateOpenReleases": "Open releases",
   "settingsUpdateOpenFailed": "Can't open link",
   "settingsAboutVersion": "Version {version} · Flutter + Material You",

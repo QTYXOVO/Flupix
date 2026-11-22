@@ -206,6 +206,24 @@
   "settingsUpdateReleaseNotes": "更新内容",
   "settingsUpdateNoNotes": "该版本没有提供更新说明。",
   "settingsUpdateDownload": "前往下载",
+  "settingsUpdateInstall": "下载并安装",
+  "settingsUpdateDownloading": "正在下载 {version}…",
+  "@settingsUpdateDownloading": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsUpdateInstalling": "下载完成，正在安装…",
+  "settingsUpdateFailed": "更新失败：{error}",
+  "@settingsUpdateFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "settingsUpdateOpenReleases": "打开发布页",
   "settingsUpdateOpenFailed": "无法打开链接",
   "settingsAboutVersion": "版本 {version} · Flutter + Material You",

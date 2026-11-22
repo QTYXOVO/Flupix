@@ -956,6 +956,30 @@ abstract class AppLocalizations {
   /// **'前往下载'**
   String get settingsUpdateDownload;
 
+  /// No description provided for @settingsUpdateInstall.
+  ///
+  /// In zh, this message translates to:
+  /// **'下载并安装'**
+  String get settingsUpdateInstall;
+
+  /// No description provided for @settingsUpdateDownloading.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在下载 {version}…'**
+  String settingsUpdateDownloading(String version);
+
+  /// No description provided for @settingsUpdateInstalling.
+  ///
+  /// In zh, this message translates to:
+  /// **'下载完成，正在安装…'**
+  String get settingsUpdateInstalling;
+
+  /// No description provided for @settingsUpdateFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新失败：{error}'**
+  String settingsUpdateFailed(String error);
+
   /// No description provided for @settingsUpdateOpenReleases.
   ///
   /// In zh, this message translates to:
