@@ -30,7 +30,7 @@ android {
             create("release") {
                 keyAlias = keystoreProperties.getProperty("keyAlias")
                 keyPassword = keystoreProperties.getProperty("keyPassword")
-                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storeFile = file(keystoreProperties.getProperty("storeFile") ?: "upload-keystore.jks")
                 storePassword = keystoreProperties.getProperty("storePassword")
             }
         }
