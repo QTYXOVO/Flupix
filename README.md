@@ -1,5 +1,12 @@
 # Flupix
 
+[![Release](https://img.shields.io/github/v/release/QTYXOVO/Flupix?style=flat-square&label=release)](https://github.com/QTYXOVO/Flupix/releases/latest)
+[![Build](https://img.shields.io/github/actions/workflow/status/QTYXOVO/Flupix/build.yml?style=flat-square&label=build)](https://github.com/QTYXOVO/Flupix/actions/workflows/build.yml)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Android-4C8BF5?style=flat-square)](https://github.com/QTYXOVO/Flupix/releases/latest)
+[![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?style=flat-square&logo=flutter&logoColor=white)](https://flutter.dev)
+[![Downloads](https://img.shields.io/github/downloads/QTYXOVO/Flupix/total?style=flat-square&label=downloads)](https://github.com/QTYXOVO/Flupix/releases)
+[![License](https://img.shields.io/badge/license-learning%20only-lightgrey?style=flat-square)](#license)
+
 > Material You 风格的多功能工具箱，同时兼容 **Windows** 与 **Android** 平台。
 
 常用小工具，随手即用。所有功能均在本地离线运行，不收集任何数据。
