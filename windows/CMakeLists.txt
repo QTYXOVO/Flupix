@@ -59,6 +59,10 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 add_subdirectory("runner")
 
 
+# flutter_inappwebview_windows 通过 WebView2 / WIL 传递引入了 <experimental/coroutine>，
+# MSVC 14.52 起将其视为硬错误（STL1011）。定义该宏临时压制，等插件上游迁移到 C++20 后可移除。
+add_compile_definitions(_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.
 include(flutter/generated_plugins.cmake)
