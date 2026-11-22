@@ -1,15 +1,10 @@
 name: Release
 
+# 发布版本：只在推送 v* tag 时触发，独立完成构建并创建 GitHub Release。
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: '1.0.0'
-        required: true
-        default: '0.0.1'
 
 permissions:
   contents: write
@@ -18,26 +13,34 @@ env:
   FLUTTER_VERSION: '3.47.9'
 
 jobs:
-  build-android:
+  prepare:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      code: ${{ steps.version.outputs.code }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Resolve version
         id: version
         shell: bash
+        env:
+          INPUT_VERSION: ${{ github.ref_name }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ inputs.version }}"
-          else
-            VERSION="${GITHUB_REF_NAME#v}"
-          fi
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION%%-*}"
+          VERSION="${INPUT_VERSION#v}"
+          BASE="${VERSION%%-*}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$BASE"
+          MINOR="${MINOR:-0}"
           PATCH="${PATCH:-0}"
           CODE=$((10#$MAJOR * 10000 + 10#$MINOR * 100 + 10#$PATCH))
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "code=$CODE" >> "$GITHUB_OUTPUT"
-          sed -i -E "s/^version: .*/version: ${VERSION}+${CODE}/" pubspec.yaml
+
+  build-android:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v4
         with:
@@ -73,12 +76,17 @@ jobs:
           } > android/key.properties
 
       - name: Build APK
-        run: flutter build apk --release
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          CODE: ${{ needs.prepare.outputs.code }}
+        run: flutter build apk --release --build-name="$VERSION" --build-number="$CODE"
 
       - name: Collect artifact
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           cp build/app/outputs/flutter-apk/app-release.apk \
-            "Flupix-${{ steps.version.outputs.version }}-android.apk"
+            "Flupix-${VERSION}-android.apk"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -87,27 +95,10 @@ jobs:
           if-no-files-found: error
 
   build-windows:
+    needs: prepare
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Resolve version
-        id: version
-        shell: pwsh
-        run: |
-          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
-            $version = "${{ inputs.version }}"
-          } else {
-            $version = "$env:GITHUB_REF_NAME".TrimStart("v")
-          }
-          $parts = $version.Split("-")[0].Split(".")
-          $major = [int]$parts[0]
-          $minor = if ($parts.Length -gt 1) { [int]$parts[1] } else { 0 }
-          $patch = if ($parts.Length -gt 2) { [int]$parts[2] } else { 0 }
-          $code = $major * 10000 + $minor * 100 + $patch
-          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          "code=$code" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          (Get-Content pubspec.yaml) -replace '^version: .*', "version: $version+$code" | Set-Content pubspec.yaml
 
       - uses: subosito/flutter-action@v2
         with:
@@ -119,17 +110,23 @@ jobs:
         run: flutter pub get
 
       - name: Build Windows
-        run: flutter build windows --release
+        shell: pwsh
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          CODE: ${{ needs.prepare.outputs.code }}
+        run: flutter build windows --release --build-name="$env:VERSION" --build-number="$env:CODE"
 
       - name: Package
         shell: pwsh
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           $releaseDir = Get-ChildItem -Path build/windows -Recurse -Directory -Filter Release |
             Where-Object { $_.FullName -match 'runner' } |
             Select-Object -First 1
           if (-not $releaseDir) { throw "未找到 Windows 构建输出目录" }
           Compress-Archive -Path (Join-Path $releaseDir.FullName '*') `
-            -DestinationPath "Flupix-${{ steps.version.outputs.version }}-windows-x64.zip"
+            -DestinationPath "Flupix-$env:VERSION-windows-x64.zip"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -138,7 +135,6 @@ jobs:
           if-no-files-found: error
 
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
     needs: [build-android, build-windows]
     runs-on: ubuntu-latest
     steps:
