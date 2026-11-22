@@ -962,6 +962,12 @@ abstract class AppLocalizations {
   /// **'下载并安装'**
   String get settingsUpdateInstall;
 
+  /// No description provided for @settingsUpdateInstallPermission.
+  ///
+  /// In zh, this message translates to:
+  /// **'请在系统设置中允许安装未知应用后重试'**
+  String get settingsUpdateInstallPermission;
+
   /// No description provided for @settingsUpdateDownloading.
   ///
   /// In zh, this message translates to:

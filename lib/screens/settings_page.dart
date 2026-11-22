@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../core/app_settings.dart';
@@ -25,6 +27,10 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage>
     with WidgetsBindingObserver {
+  static const MethodChannel _apkInstaller = MethodChannel(
+    'flupix/apk_installer',
+  );
+
   final ShizukuService _shizuku = ShizukuService();
   final PixivProxyStore _proxyStore = PixivProxyStore();
   final TextEditingController _proxyController = TextEditingController();
@@ -225,9 +231,10 @@ class _SettingsPageState extends State<SettingsPage>
       builder: (dialogContext) {
         final scheme = Theme.of(dialogContext).colorScheme;
         final textTheme = Theme.of(dialogContext).textTheme;
-        final useInstaller =
-            Platform.isWindows &&
-            (release.downloadUrl?.path.toLowerCase().endsWith('.exe') ?? false);
+        final downloadPath = release.downloadUrl?.path.toLowerCase() ?? '';
+        final canAutoUpdate =
+            (Platform.isWindows && downloadPath.endsWith('.exe')) ||
+            (Platform.isAndroid && downloadPath.endsWith('.apk'));
         return AlertDialog(
           icon: const Icon(Icons.system_update_rounded),
           title: Text(l10n.settingsUpdateAvailableTitle(release.version)),
@@ -271,20 +278,20 @@ class _SettingsPageState extends State<SettingsPage>
             FilledButton.icon(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
-                if (useInstaller) {
-                  _startWindowsUpdate(release);
+                if (canAutoUpdate) {
+                  _startUpdate(release);
                 } else {
                   _openReleaseUrl(release.downloadUrl ?? release.releaseUrl);
                 }
               },
               icon: Icon(
-                useInstaller
+                canAutoUpdate
                     ? Icons.system_update_alt_rounded
                     : Icons.download_rounded,
                 size: 18,
               ),
               label: Text(
-                useInstaller
+                canAutoUpdate
                     ? l10n.settingsUpdateInstall
                     : l10n.settingsUpdateDownload,
               ),
@@ -295,10 +302,18 @@ class _SettingsPageState extends State<SettingsPage>
     );
   }
 
-  Future<void> _startWindowsUpdate(AppRelease release) async {
+  Future<void> _startUpdate(AppRelease release) async {
     final url = release.downloadUrl;
     if (url == null) {
       await _openReleaseUrl(release.releaseUrl);
+      return;
+    }
+    final isWindowsInstaller =
+        Platform.isWindows && url.path.toLowerCase().endsWith('.exe');
+    final isAndroidPackage =
+        Platform.isAndroid && url.path.toLowerCase().endsWith('.apk');
+    if (!isWindowsInstaller && !isAndroidPackage) {
+      await _openReleaseUrl(url);
       return;
     }
 
@@ -318,16 +333,26 @@ class _SettingsPageState extends State<SettingsPage>
     );
 
     UpdateService? service;
+    var dialogOpen = true;
     try {
       service = UpdateService(proxy: await _loadUpdateProxy());
-      final fileName = url.pathSegments.isEmpty
+      final fallbackName = isWindowsInstaller
           ? 'Flupix-setup.exe'
+          : 'Flupix-update.apk';
+      final fileName = url.pathSegments.isEmpty
+          ? fallbackName
           : url.pathSegments.last;
-      final dir = await Directory.systemTemp.createTemp('flupix_update_');
-      final installer = File('${dir.path}${Platform.pathSeparator}$fileName');
+      final tempDir = await getTemporaryDirectory();
+      final updateDir = Directory(
+        '${tempDir.path}${Platform.pathSeparator}updates',
+      );
+      await updateDir.create(recursive: true);
+      final package = File(
+        '${updateDir.path}${Platform.pathSeparator}$fileName',
+      );
       await service.downloadFile(
         url,
-        installer,
+        package,
         onProgress: (received, total) {
           if (total != null && total > 0) {
             progress.value = received / total;
@@ -340,29 +365,56 @@ class _SettingsPageState extends State<SettingsPage>
       if (hashUrl != null) {
         final text = await service.fetchText(hashUrl);
         final expected = text.trim().split(RegExp(r'\s+')).first.toLowerCase();
-        final actual = await service.sha256OfFile(installer);
+        final actual = await service.sha256OfFile(package);
         if (expected.isNotEmpty && actual.toLowerCase() != expected) {
           throw const UpdateCheckException('安装包校验失败，请重试');
         }
       }
 
-      await Process.start(
-        installer.path,
-        const [
-          '/VERYSILENT',
-          '/SUPPRESSMSGBOXES',
-          '/NORESTART',
-          '/CLOSEAPPLICATIONS',
-          '/RESTARTAPPLICATIONS',
-        ],
-        mode: ProcessStartMode.detached,
-      );
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-      exit(0);
+      if (isWindowsInstaller) {
+        await Process.start(
+          package.path,
+          const [
+            '/VERYSILENT',
+            '/SUPPRESSMSGBOXES',
+            '/NORESTART',
+            '/CLOSEAPPLICATIONS',
+            '/RESTARTAPPLICATIONS',
+          ],
+          mode: ProcessStartMode.detached,
+        );
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        exit(0);
+      }
+
+      final canInstall =
+          await _apkInstaller.invokeMethod<bool>('canInstall') ?? true;
+      if (!canInstall) {
+        await _apkInstaller.invokeMethod<void>('openInstallSettings');
+        if (dialogOpen && mounted) {
+          Navigator.of(context, rootNavigator: true).pop();
+          dialogOpen = false;
+        }
+        if (mounted) _notify(context.l10n.settingsUpdateInstallPermission);
+        return;
+      }
+
+      if (dialogOpen && mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        dialogOpen = false;
+      }
+      await _apkInstaller.invokeMethod<void>('install', {'path': package.path});
     } catch (error) {
+      if (dialogOpen && mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+        dialogOpen = false;
+      }
       if (!mounted) return;
-      Navigator.of(context, rootNavigator: true).pop();
-      final message = error is UpdateCheckException ? error.message : '$error';
+      final message = error is UpdateCheckException
+          ? error.message
+          : error is PlatformException
+          ? error.message ?? error.code
+          : '$error';
       _notify(context.l10n.settingsUpdateFailed(message), error: true);
     } finally {
       service?.close();

@@ -464,6 +464,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsUpdateInstall => '下载并安装';
 
   @override
+  String get settingsUpdateInstallPermission => '请在系统设置中允许安装未知应用后重试';
+
+  @override
   String settingsUpdateDownloading(String version) {
     return '正在下载 $version…';
   }

@@ -6,11 +6,13 @@ import io.flutter.embedding.engine.FlutterEngine
 
 class MainActivity : FlutterActivity() {
     private val audioSaveBridge by lazy { AudioSaveBridge(this) }
+    private val apkInstallBridge by lazy { ApkInstallBridge(this) }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         QqStickerBridge(this).register(flutterEngine.dartExecutor.binaryMessenger)
         audioSaveBridge.register(flutterEngine.dartExecutor.binaryMessenger)
+        apkInstallBridge.register(flutterEngine.dartExecutor.binaryMessenger)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -487,6 +487,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsUpdateInstall => 'Download and install';
 
   @override
+  String get settingsUpdateInstallPermission =>
+      'Allow installing unknown apps in system settings, then try again.';
+
+  @override
   String settingsUpdateDownloading(String version) {
     return 'Downloading $version…';
   }

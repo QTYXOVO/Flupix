@@ -207,6 +207,7 @@
   "settingsUpdateNoNotes": "该版本没有提供更新说明。",
   "settingsUpdateDownload": "前往下载",
   "settingsUpdateInstall": "下载并安装",
+  "settingsUpdateInstallPermission": "请在系统设置中允许安装未知应用后重试",
   "settingsUpdateDownloading": "正在下载 {version}…",
   "@settingsUpdateDownloading": {
     "placeholders": {

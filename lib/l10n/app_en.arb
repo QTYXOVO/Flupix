@@ -144,6 +144,7 @@
   "settingsUpdateNoNotes": "No release notes were provided for this version.",
   "settingsUpdateDownload": "Download",
   "settingsUpdateInstall": "Download and install",
+  "settingsUpdateInstallPermission": "Allow installing unknown apps in system settings, then try again.",
   "settingsUpdateDownloading": "Downloading {version}…",
   "@settingsUpdateDownloading": {
     "placeholders": {
