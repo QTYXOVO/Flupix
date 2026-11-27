@@ -5,6 +5,7 @@ import '../tools/audio_convert_page.dart';
 import '../tools/calculator_page.dart';
 import '../tools/color_page.dart';
 import '../tools/eh/eh_browse_page.dart';
+import '../tools/exif_page.dart';
 import '../tools/hash_page.dart';
 import '../tools/json_page.dart';
 import '../tools/markdown_page.dart';
@@ -109,6 +110,13 @@ final List<ToolItem> allTools = [
     icon: Icons.grid_view_rounded,
     category: ToolCategory.other,
     builder: (_) => const SlidingPuzzlePage(),
+  ),
+  ToolItem(
+    title: (l10n) => l10n.toolExifTitle,
+    subtitle: (l10n) => l10n.toolExifDesc,
+    icon: Icons.camera_alt_outlined,
+    category: ToolCategory.other,
+    builder: (_) => const ExifPage(),
   ),
   ToolItem(
     title: (l10n) => l10n.toolQqStickerTitle,

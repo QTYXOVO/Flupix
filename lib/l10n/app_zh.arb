@@ -11,6 +11,9 @@
   "commonRefresh": "刷新",
   "commonSearch": "搜索",
   "commonClose": "关闭",
+  "windowMinimize": "最小化",
+  "windowMaximize": "最大化",
+  "windowRestore": "还原",
   "commonLoading": "加载中…",
   "commonEmpty": "暂无内容",
   "commonAll": "全部",
@@ -94,6 +97,85 @@
   "toolEhDesc": "搜索、浏览与阅读 E-Hentai / ExHentai 图库",
   "toolPixivTitle": "Pixiv Token",
   "toolPixivDesc": "OAuth 登录获取 access_token 与 PHPSESSID",
+  "toolExifTitle": "图片 EXIF 分析",
+  "toolExifDesc": "读取相机、镜头、拍摄参数与 GPS 位置",
+  "exifSubtitle": "全部在本地解析，图片不会上传",
+  "exifPickImage": "选择图片",
+  "exifChangeImage": "更换图片",
+  "exifEmptyTitle": "选择图片查看 EXIF",
+  "exifEmptyHint": "支持 JPEG、PNG、WebP 与 TIFF。相机型号、曝光参数、拍摄时间和 GPS 位置都会显示在这里。",
+  "exifNoExif": "这张图片没有可读取的 EXIF 数据，部分社交软件会主动删除照片元数据。",
+  "exifUnsupported": "暂不支持解析该格式的 EXIF（例如 HEIC），可以转换为 JPEG 后再试。",
+  "exifLoadFailed": "读取图片失败：{error}",
+  "@exifLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exifFormat": "格式",
+  "exifDimensions": "尺寸",
+  "exifFileSize": "文件大小",
+  "exifByteOrder": "字节序",
+  "exifByteOrderLittle": "小端（II）",
+  "exifByteOrderBig": "大端（MM）",
+  "exifKeySection": "关键信息",
+  "exifCamera": "相机",
+  "exifLens": "镜头",
+  "exifTakenAt": "拍摄时间",
+  "exifShutter": "快门",
+  "exifAperture": "光圈",
+  "exifIso": "ISO",
+  "exifFocalLength": "焦距",
+  "exifExposureBias": "曝光补偿",
+  "exifFlash": "闪光灯",
+  "exifWhiteBalance": "白平衡",
+  "exifOrientation": "方向",
+  "exifSoftware": "软件",
+  "exifXmp": "XMP 数据",
+  "exifGpsSection": "GPS 位置",
+  "exifCoordinates": "坐标",
+  "exifAltitude": "海拔",
+  "exifOpenMap": "在地图中查看",
+  "exifThumbnail": "内嵌缩略图",
+  "exifAllTags": "全部标签",
+  "exifTagCount": "{count} 个标签",
+  "@exifTagCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exifCopyAll": "复制全部信息",
+  "exifNoTags": "没有可展示的标签",
+  "exifLocalHint": "以上数据完全来自图片本身，Flupix 不会上传或修改文件。",
+  "exifGroupImage": "图像（IFD0）",
+  "exifGroupExif": "拍摄参数（Exif）",
+  "exifGroupGps": "GPS",
+  "exifGroupInterop": "互操作（Interop）",
+  "exifGroupThumbnail": "缩略图（IFD1）",
+  "exifStripExport": "抹去 EXIF 并导出",
+  "exifStripExporting": "正在导出…",
+  "exifStripHint": "导出不含元数据的副本，原图不会被修改",
+  "exifStripSaved": "已导出：{name}",
+  "@exifStripSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exifStripFailed": "导出失败：{error}",
+  "@exifStripFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exifStripUnsupported": "该格式暂不支持抹去元数据",
   "settingsTitle": "设置",
   "settingsSubtitleAndroid": "外观、主题与权限",
   "settingsSubtitleDesktop": "外观、主题与网络",
