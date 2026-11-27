@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../core/audio_converter.dart';
+import '../core/platform_capabilities.dart';
 import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
@@ -244,7 +245,7 @@ class _AudioConvertPageState extends State<AudioConvertPage> {
     setState(() => _saving = true);
     try {
       final bytes = await file.readAsBytes();
-      final savedName = Platform.isAndroid
+      final savedName = AppCapabilities.savesFilesToMediaStore
           ? await _saveOnAndroid(name: name, bytes: bytes, format: format)
           : await _saveWithPicker(name: name, bytes: bytes, format: format);
       if (savedName == null || !mounted) return;

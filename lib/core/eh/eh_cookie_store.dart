@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../secure_store.dart';
 import 'eh_models.dart';
 
 /// Cookie 与站点相关的轻量持久化。
@@ -11,8 +12,7 @@ class EhCookieStore {
   static const _proxyKey = 'eh_proxy';
 
   static Future<EhCookie> load() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_cookieKey);
+    final raw = await SecureStore.read(_cookieKey);
     if (raw == null || raw.isEmpty) return const EhCookie.empty();
     try {
       final decoded = jsonDecode(raw);
@@ -24,13 +24,11 @@ class EhCookieStore {
   }
 
   static Future<void> save(EhCookie cookie) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_cookieKey, jsonEncode(cookie.toJson()));
+    await SecureStore.write(_cookieKey, jsonEncode(cookie.toJson()));
   }
 
   static Future<void> clear() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_cookieKey);
+    await SecureStore.delete(_cookieKey);
   }
 
   static Future<EhSite> loadSite() async {

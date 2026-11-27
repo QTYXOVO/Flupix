@@ -13,9 +13,8 @@ import '../../core/eh/eh_repository.dart';
 import '../../core/eh/eh_session.dart';
 import '../../core/eh/eh_tags.dart';
 import '../../l10n/l10n.dart';
+import '../../navigation/app_routes.dart';
 import '../../widgets/ui_kit.dart';
-import 'eh_browse_page.dart';
-import 'eh_reader_page.dart';
 
 /// 图库详情：封面、标签、预览缩略图与阅读入口。
 class EhDetailPage extends StatefulWidget {
@@ -116,17 +115,15 @@ class _EhDetailPageState extends State<EhDetailPage> {
     final start = index ?? _startIndex;
     final manager = widget.downloadManager;
     await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => EhReaderPage(
-          repository: widget.repository,
-          item: widget.item,
-          detail: detail,
-          totalPages: total,
-          initialIndex: start.clamp(0, total - 1),
-          localPagePath: manager == null
-              ? null
-              : (page) => manager.localPagePath(widget.item.gid, page),
-        ),
+      AppRoutes.ehReader(
+        repository: widget.repository,
+        item: widget.item,
+        detail: detail,
+        totalPages: total,
+        initialIndex: start.clamp(0, total - 1),
+        localPagePath: manager == null
+            ? null
+            : (page) => manager.localPagePath(widget.item.gid, page),
       ),
     );
     if (!mounted) return;
@@ -667,10 +664,7 @@ class _EhDetailPageState extends State<EhDetailPage> {
 
   void _openTag(String namespace, String tag) {
     Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) =>
-            EhBrowsePage(initialKeyword: ehTagQuery(namespace, tag)),
-      ),
+      AppRoutes.ehBrowse(initialKeyword: ehTagQuery(namespace, tag)),
     );
   }
 }

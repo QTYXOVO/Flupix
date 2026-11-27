@@ -49,6 +49,8 @@ app.*.map.json
 
 # Flutter generated
 .metadata
+# 由 flutter gen-l10n 生成（pubspec.yaml 已开启 generate: true），不入库。
+/lib/l10n/generated/
 
 # Android
 android/local.properties

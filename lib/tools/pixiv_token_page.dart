@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import '../core/formatters.dart';
 import '../core/pixiv_auth.dart';
+import '../core/platform_capabilities.dart';
 import '../l10n/l10n.dart';
+import '../navigation/app_routes.dart';
 import '../widgets/ui_kit.dart';
-import 'pixiv_login_page.dart';
 
 class PixivTokenPage extends StatefulWidget {
   const PixivTokenPage({super.key});
@@ -50,7 +49,7 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
   Future<void> _restore() async {
     final token = await _store.load();
     // 代理仅在 Windows 桌面端提供，移动端由系统级代理/VPN 接管。
-    final proxy = Platform.isWindows
+    final proxy = AppCapabilities.supportsSystemProxy
         ? await _proxyStore.load() ?? await readSystemProxy()
         : null;
     if (!mounted) return;
@@ -77,11 +76,8 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
     });
     final pkce = generatePkcePair();
     try {
-      final code = await Navigator.of(context).push<String>(
-        MaterialPageRoute<String>(
-          builder: (_) => PixivOAuthPage(challenge: pkce.challenge),
-        ),
-      );
+      final code = await Navigator.of(context)
+          .push<String>(AppRoutes.pixivOAuth(pkce.challenge));
       if (code == null) {
         _notify(l10n.pixivLoginCancelled);
         return;
@@ -166,9 +162,8 @@ class _PixivTokenPageState extends State<PixivTokenPage> {
     final l10n = context.l10n;
     setState(() => _busy = true);
     try {
-      final session = await Navigator.of(context).push<String>(
-        MaterialPageRoute<String>(builder: (_) => const PixivCookiePage()),
-      );
+      final session = await Navigator.of(context)
+          .push<String>(AppRoutes.pixivCookie());
       if (!mounted) return;
       if (session == null) return;
       setState(() => _phpSessionId = session);

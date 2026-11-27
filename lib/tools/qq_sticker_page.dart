@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/app_settings.dart';
+import '../core/platform_capabilities.dart';
 import '../core/shizuku.dart';
 import '../l10n/l10n.dart';
-import '../screens/settings_page.dart';
+import '../navigation/app_routes.dart';
 import '../widgets/ui_kit.dart';
 
 class QqStickerPage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _QqStickerPageState extends State<QqStickerPage> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
+    if (AppCapabilities.supportsShizuku) {
       _loadStatus();
     } else {
       _loading = false;
@@ -49,7 +50,7 @@ class _QqStickerPageState extends State<QqStickerPage> {
   }
 
   Future<void> _loadStatus({bool quiet = false}) async {
-    if (!Platform.isAndroid) return;
+    if (!AppCapabilities.supportsShizuku) return;
     if (!quiet) {
       setState(() => _loading = true);
     }
@@ -83,11 +84,8 @@ class _QqStickerPageState extends State<QqStickerPage> {
   }
 
   Future<void> _openSettings() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => SettingsPage(settings: SettingsScope.of(context)),
-      ),
-    );
+    await Navigator.of(context)
+        .push(AppRoutes.settings(SettingsScope.of(context)));
     if (mounted) await _loadStatus(quiet: true);
   }
 
@@ -227,7 +225,7 @@ class _QqStickerPageState extends State<QqStickerPage> {
     return ToolPage(
       title: context.l10n.qqStickerTitle,
       subtitle: context.l10n.qqStickerSubtitle,
-      child: !Platform.isAndroid
+      child: !AppCapabilities.supportsShizuku
           ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(32),

@@ -8,8 +8,8 @@ import '../../core/eh/eh_models.dart';
 import '../../core/eh/eh_repository.dart';
 import '../../core/eh/eh_session.dart';
 import '../../l10n/l10n.dart';
+import '../../navigation/app_routes.dart';
 import '../../widgets/ui_kit.dart';
-import 'eh_detail_page.dart';
 
 /// 我的图库：本地收藏与阅读历史。
 class EhLibraryPage extends StatefulWidget {
@@ -53,13 +53,11 @@ class _EhLibraryPageState extends State<EhLibraryPage> {
 
   Future<void> _openDetail(GalleryItem item) async {
     await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => EhDetailPage(
-          session: widget.session,
-          repository: widget.repository,
-          item: item,
-          downloadManager: widget.downloadManager,
-        ),
+      AppRoutes.ehDetail(
+        session: widget.session,
+        repository: widget.repository,
+        item: item,
+        downloadManager: widget.downloadManager,
       ),
     );
     if (mounted) await _load();

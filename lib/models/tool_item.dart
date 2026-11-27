@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
+import '../core/platform_capabilities.dart';
 import '../l10n/l10n.dart';
 
 enum ToolCategory {
@@ -11,11 +10,11 @@ enum ToolCategory {
   other;
 
   String get label => switch (this) {
-        ToolCategory.convert => AppL10n.current.categoryConvert,
-        ToolCategory.text => AppL10n.current.categoryText,
-        ToolCategory.generate => AppL10n.current.categoryGenerate,
-        ToolCategory.other => AppL10n.current.categoryOther,
-      };
+    ToolCategory.convert => AppL10n.current.categoryConvert,
+    ToolCategory.text => AppL10n.current.categoryText,
+    ToolCategory.generate => AppL10n.current.categoryGenerate,
+    ToolCategory.other => AppL10n.current.categoryOther,
+  };
 }
 
 class ToolItem {
@@ -39,5 +38,5 @@ class ToolItem {
 
   /// 当前系统是否可以使用该工具，Shizuku 相关能力仅 Android 支持。
   bool get isAvailableOnCurrentPlatform =>
-      !requiresShizuku || Platform.isAndroid;
+      !requiresShizuku || AppCapabilities.supportsShizuku;
 }

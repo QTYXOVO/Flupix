@@ -9,6 +9,8 @@ import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../l10n/l10n.dart';
+import 'platform_capabilities.dart';
+import 'secure_store.dart';
 
 /// pixiv 官方 App 使用的 OAuth 客户端参数（与 pixivpy 保持一致）。
 const String pixivClientId = 'MOBrBDS8blbauoSck0ZfDbtuzpyT';
@@ -289,7 +291,7 @@ class PixivProxyStore {
 
 /// 读取 Windows「Internet 选项」中的系统代理，其余平台返回 null。
 Future<String?> readSystemProxy() async {
-  if (!Platform.isWindows) return null;
+  if (!AppCapabilities.supportsSystemProxy) return null;
   try {
     final enabled = await Process.run('reg', [
       'query',
@@ -331,13 +333,12 @@ Future<String?> readSystemProxy() async {
   }
 }
 
-/// Token 仅保存在本机偏好存储中，不会上传到任何第三方服务。
+/// Token 加密保存在本机安全存储中，不会上传到任何第三方服务。
 class PixivTokenStore {
   static const String _key = 'pixiv_token_record';
 
   Future<PixivToken?> load() async {
-    final preferences = await SharedPreferences.getInstance();
-    final raw = preferences.getString(_key);
+    final raw = await SecureStore.read(_key);
     if (raw == null || raw.isEmpty) return null;
     try {
       final json = jsonDecode(raw) as Map<String, dynamic>;
@@ -350,12 +351,10 @@ class PixivTokenStore {
   }
 
   Future<void> save(PixivToken token) async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.setString(_key, jsonEncode(token.toJson()));
+    await SecureStore.write(_key, jsonEncode(token.toJson()));
   }
 
   Future<void> clear() async {
-    final preferences = await SharedPreferences.getInstance();
-    await preferences.remove(_key);
+    await SecureStore.delete(_key);
   }
 }

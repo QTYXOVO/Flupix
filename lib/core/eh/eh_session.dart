@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
 import '../pixiv_auth.dart';
+import '../platform_capabilities.dart';
 import 'eh_client.dart';
 import 'eh_cookie_store.dart';
 import 'eh_models.dart';
@@ -56,7 +56,7 @@ class EhSession extends ChangeNotifier {
     }
     _cookie = cookie;
     final savedProxy = results[2] as String?;
-    if (savedProxy == null && Platform.isWindows) {
+    if (savedProxy == null && AppCapabilities.supportsSystemProxy) {
       _proxy = await readSystemProxy();
     } else {
       _proxy = savedProxy;

@@ -131,14 +131,21 @@ lib/
 ├── tools/                   # 各工具页面实现
 │   └── eh/                  # E-Hentai 相关页面
 ├── widgets/                 # 通用 UI 组件
-└── l10n/                    # 国际化资源（zh / en）与生成代码
+├── l10n/                    # 国际化资源（zh / en）；generated/ 由构建生成，不入库
+└── tool/                    # 维护脚本（同步 third_party 副本）
 ```
 
 ## 依赖说明
 
 项目主要依赖：`crypto`、`qr_flutter`、`shared_preferences`、`http`、`flutter_inappwebview`、`flutter_markdown_plus`、`file_picker`、`html`、`photo_view`、`path_provider`、`audioplayers`。
 
-`ffmpeg_kit_flutter_new_audio` 以本地副本形式置于 `third_party/`，仅保留 Android 实现；Windows 端改用系统 FFmpeg，避免构建时下载运行时。
+`ffmpeg_kit_flutter_new_audio` 以本地副本形式置于 `third_party/`，仅保留 Android 实现；Windows 端改用系统 FFmpeg，避免构建时下载运行时。副本的固定版本与裁剪规则见 [UPSTREAM.md](third_party/ffmpeg_kit_flutter_new_audio/UPSTREAM.md)，升级时执行：
+
+```powershell
+pwsh tool/sync_ffmpeg_kit.ps1 -Version <上游版本>
+```
+
+`lib/l10n/generated/` 由 `flutter gen-l10n` 生成（`flutter pub get` 会自动触发），不纳入版本库。克隆后先运行 `flutter pub get` 即可生成。
 
 ## 测试
 

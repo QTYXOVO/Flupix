@@ -10,12 +10,8 @@ import '../../core/eh/eh_models.dart';
 import '../../core/eh/eh_repository.dart';
 import '../../core/eh/eh_session.dart';
 import '../../l10n/l10n.dart';
+import '../../navigation/app_routes.dart';
 import '../../widgets/ui_kit.dart';
-import 'eh_detail_page.dart';
-import 'eh_download_page.dart';
-import 'eh_library_page.dart';
-import 'eh_login_page.dart';
-import 'eh_tag_search_page.dart';
 
 /// E-Hentai 浏览页：搜索、分类筛选、下拉刷新与滚动分页。
 class EhBrowsePage extends StatefulWidget {
@@ -177,9 +173,8 @@ class _EhBrowsePageState extends State<EhBrowsePage> {
   }
 
   Future<void> _openLogin() async {
-    final result = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(builder: (_) => EhLoginPage(session: _session)),
-    );
+    final result = await Navigator.of(context)
+        .push<bool>(AppRoutes.ehLogin(_session));
     if (result == true && mounted) {
       _rebuildRepository();
       await _reload();
@@ -190,12 +185,10 @@ class _EhBrowsePageState extends State<EhBrowsePage> {
     final repository = _repository;
     if (repository == null) return;
     await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => EhLibraryPage(
-          session: _session,
-          repository: repository,
-          downloadManager: _downloads,
-        ),
+      AppRoutes.ehLibrary(
+        session: _session,
+        repository: repository,
+        downloadManager: _downloads,
       ),
     );
   }
@@ -203,17 +196,14 @@ class _EhBrowsePageState extends State<EhBrowsePage> {
   Future<void> _openDownloads() async {
     final downloads = _downloads;
     if (downloads == null) return;
-    await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => EhDownloadPage(session: _session, manager: downloads),
-      ),
-    );
+    await Navigator.of(
+      context,
+    ).push<void>(AppRoutes.ehDownloads(session: _session, manager: downloads));
   }
 
   Future<void> _openTagSearch() async {
-    final query = await Navigator.of(
-      context,
-    ).push<String>(MaterialPageRoute(builder: (_) => const EhTagSearchPage()));
+    final query = await Navigator.of(context)
+        .push<String>(AppRoutes.ehTagSearch());
     if (query == null || query.trim().isEmpty || !mounted) return;
     _searchController.text = query;
     _keyword = query;
@@ -623,13 +613,11 @@ class _EhBrowsePageState extends State<EhBrowsePage> {
 
   Future<void> _openDetail(GalleryItem item) async {
     await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => EhDetailPage(
-          session: _session,
-          repository: _repository!,
-          item: item,
-          downloadManager: _downloads,
-        ),
+      AppRoutes.ehDetail(
+        session: _session,
+        repository: _repository!,
+        item: item,
+        downloadManager: _downloads,
       ),
     );
   }

@@ -10,6 +10,7 @@ import '../../core/eh/eh_exceptions.dart';
 import '../../core/eh/eh_image.dart';
 import '../../core/eh/eh_models.dart';
 import '../../core/eh/eh_repository.dart';
+import '../../core/platform_capabilities.dart';
 import '../../l10n/l10n.dart';
 import 'eh_reader_controller.dart';
 
@@ -59,7 +60,7 @@ class _EhReaderPageState extends State<EhReaderPage> {
     );
     _controller.addListener(_onControllerChanged);
     _pageController = PageController(initialPage: widget.initialIndex);
-    if (Platform.isAndroid) {
+    if (AppCapabilities.usesImmersiveSystemUi) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }
   }
@@ -86,7 +87,7 @@ class _EhReaderPageState extends State<EhReaderPage> {
       ..removeListener(_onControllerChanged)
       ..dispose();
     _pageController.dispose();
-    if (Platform.isAndroid) {
+    if (AppCapabilities.usesImmersiveSystemUi) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
     super.dispose();

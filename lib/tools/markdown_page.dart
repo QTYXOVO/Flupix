@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/platform_capabilities.dart';
 import '../l10n/l10n.dart';
 import '../widgets/ui_kit.dart';
 
@@ -39,8 +39,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
     final pending = _controller.text;
     if (pending.trim().isNotEmpty) {
       unawaited(
-        SharedPreferences.getInstance()
-            .then((prefs) => prefs.setString(_draftKey, pending)),
+        SharedPreferences.getInstance().then(
+          (prefs) => prefs.setString(_draftKey, pending),
+        ),
       );
     }
     _controller.dispose();
@@ -87,8 +88,11 @@ class _MarkdownPageState extends State<MarkdownPage> {
     }
     final selected = selection.textInside(text);
     final content = selected.isEmpty ? placeholder : selected;
-    final newText =
-        text.replaceRange(selection.start, selection.end, '$before$content$after');
+    final newText = text.replaceRange(
+      selection.start,
+      selection.end,
+      '$before$content$after',
+    );
     final start = selection.start + before.length;
     _applyEdit(
       TextEditingValue(
@@ -114,8 +118,9 @@ class _MarkdownPageState extends State<MarkdownPage> {
     if (lineEnd == -1) lineEnd = text.length;
 
     final lines = text.substring(lineStart, lineEnd).split('\n');
-    final allPrefixed =
-        lines.every((line) => line.isEmpty || line.startsWith(prefix));
+    final allPrefixed = lines.every(
+      (line) => line.isEmpty || line.startsWith(prefix),
+    );
     final updated = lines
         .map((line) {
           if (line.isEmpty) return line;
@@ -223,7 +228,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
         allowedExtensions: const ['md', 'markdown', 'txt'],
       );
       if (file == null) return;
-      final content = utf8.decode(await file.readAsBytes(), allowMalformed: true);
+      final content = utf8.decode(
+        await file.readAsBytes(),
+        allowMalformed: true,
+      );
       if (!mounted) return;
       _saveTimer?.cancel();
       _controller.value = TextEditingValue(
@@ -257,7 +265,7 @@ class _MarkdownPageState extends State<MarkdownPage> {
       if (uri == null || !mounted) return;
       // 桌面端返回文件路径，可取得实际另存的文件名；移动端返回 content:// 标识，沿用默认名。
       final segments = uri.pathSegments;
-      final savedName = Platform.isWindows && segments.isNotEmpty
+      final savedName = AppCapabilities.isDesktop && segments.isNotEmpty
           ? Uri.decodeComponent(segments.last)
           : target;
       setState(() => _fileName = savedName);
@@ -343,7 +351,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
                           ),
                           ButtonSegment(
                             value: true,
-                            icon: const Icon(Icons.visibility_outlined, size: 18),
+                            icon: const Icon(
+                              Icons.visibility_outlined,
+                              size: 18,
+                            ),
                             label: Text(l10n.commonPreview),
                           ),
                         ],
@@ -372,8 +383,8 @@ class _MarkdownPageState extends State<MarkdownPage> {
                           ],
                         )
                       : _previewOnly
-                          ? _buildPreview(context)
-                          : _buildEditor(context),
+                      ? _buildPreview(context)
+                      : _buildEditor(context),
                 ),
               ],
             ),
@@ -469,7 +480,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
               ],
             ),
           ),
-          Divider(height: 1, color: scheme.outlineVariant.withValues(alpha: 0.4)),
+          Divider(
+            height: 1,
+            color: scheme.outlineVariant.withValues(alpha: 0.4),
+          ),
           Expanded(
             child: TextField(
               controller: _controller,
@@ -491,7 +505,10 @@ class _MarkdownPageState extends State<MarkdownPage> {
               onChanged: (_) => _onTextChanged(),
             ),
           ),
-          Divider(height: 1, color: scheme.outlineVariant.withValues(alpha: 0.4)),
+          Divider(
+            height: 1,
+            color: scheme.outlineVariant.withValues(alpha: 0.4),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 2, 6, 2),
             child: Row(

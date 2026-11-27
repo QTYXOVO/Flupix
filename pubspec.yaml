@@ -53,6 +53,8 @@ dependencies:
     path: third_party/ffmpeg_kit_flutter_new_audio
   package_info_plus: ^10.2.2
   url_launcher: ^6.3.3
+  window_manager: ^0.6.0
+  flutter_secure_storage: ^11.2.0
 
 dev_dependencies:
   flutter_test:

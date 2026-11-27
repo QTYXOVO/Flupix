@@ -5,8 +5,8 @@ import '../core/shizuku.dart';
 import '../data/tool_registry.dart';
 import '../l10n/l10n.dart';
 import '../models/tool_item.dart';
+import '../navigation/app_routes.dart';
 import '../widgets/ui_kit.dart';
-import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.settings});
@@ -53,9 +53,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _pushTool(ToolItem tool) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: tool.builder),
-    );
+    Navigator.of(context).push(AppRoutes.tool(tool.builder));
   }
 
   Future<void> _openTool(ToolItem tool) async {
@@ -115,11 +113,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     if (goSettings != true || !mounted) return;
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => SettingsPage(settings: widget.settings),
-      ),
-    );
+    await Navigator.of(context).push(AppRoutes.settings(widget.settings));
   }
 
   @override
@@ -152,11 +146,8 @@ class _HomePageState extends State<HomePage> {
                     tooltip: l10n.commonSettings,
                     icon: const Icon(Icons.settings_outlined),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => SettingsPage(settings: widget.settings),
-                        ),
-                      );
+                      Navigator.of(context)
+                          .push(AppRoutes.settings(widget.settings));
                     },
                   ),
                   const SizedBox(width: 8),
@@ -201,8 +192,7 @@ class _HomePageState extends State<HomePage> {
                         _FilterChip(
                           label: category.label,
                           selected: filter == category,
-                          onSelected: () =>
-                              setState(() => _filter = category),
+                          onSelected: () => setState(() => _filter = category),
                         ),
                     ],
                   ),
@@ -217,18 +207,15 @@ class _HomePageState extends State<HomePage> {
                     crossAxisSpacing: 12,
                     mainAxisExtent: 152,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final tool = tools[index];
-                      return _ToolCard(
-                        tool: tool,
-                        onTap: tool.isAvailableOnCurrentPlatform
-                            ? () => _openTool(tool)
-                            : null,
-                      );
-                    },
-                    childCount: tools.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final tool = tools[index];
+                    return _ToolCard(
+                      tool: tool,
+                      onTap: tool.isAvailableOnCurrentPlatform
+                          ? () => _openTool(tool)
+                          : null,
+                    );
+                  }, childCount: tools.length),
                 ),
               ),
             ],
@@ -322,17 +309,9 @@ class _ToolCard extends StatelessWidget {
               ),
             ),
             if (!enabled)
-              const Positioned(
-                top: 12,
-                right: 12,
-                child: _DisabledBadge(),
-              )
+              const Positioned(top: 12, right: 12, child: _DisabledBadge())
             else if (tool.requiresShizuku)
-              const Positioned(
-                top: 12,
-                right: 12,
-                child: _ShizukuBadge(),
-              ),
+              const Positioned(top: 12, right: 12, child: _ShizukuBadge()),
           ],
         ),
       ),
@@ -355,9 +334,9 @@ class _DisabledBadge extends StatelessWidget {
       child: Text(
         context.l10n.homeDisabledBadge,
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: scheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
-            ),
+          color: scheme.onSurfaceVariant,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -377,10 +356,10 @@ class _ShizukuBadge extends StatelessWidget {
       child: Text(
         'Shizuku',
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Colors.black.withValues(alpha: 0.87),
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.2,
-            ),
+          color: Colors.black.withValues(alpha: 0.87),
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.2,
+        ),
       ),
     );
   }

@@ -13,6 +13,7 @@ import 'package:ffmpeg_kit_flutter_new_audio/statistics.dart';
 import 'package:ffmpeg_kit_flutter_new_audio/stream_information.dart';
 
 import '../l10n/l10n.dart';
+import 'platform_capabilities.dart';
 
 /// 支持的输出格式。
 enum AudioFormat {
@@ -174,7 +175,7 @@ class AudioConvertService {
   AudioConvertService._();
 
   /// 桌面端使用系统 FFmpeg，移动端使用随包内置的 FFmpegKit。
-  static bool get usesSystemEngine => Platform.isWindows || Platform.isLinux;
+  static bool get usesSystemEngine => AppCapabilities.usesSystemAudioEngine;
 
   static int? _activeSessionId;
   static Process? _activeProcess;

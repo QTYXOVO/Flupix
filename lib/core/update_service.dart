@@ -7,6 +7,8 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 
+import 'platform_capabilities.dart';
+
 /// 应用对应的 GitHub 仓库。
 const String kUpdateRepoOwner = 'QTYXOVO';
 const String kUpdateRepoName = 'Flupix';
@@ -69,8 +71,7 @@ class UpdateService {
 
   /// 与应用内代理设置保持一致；为空时直连。
   static http.Client _createClient(String? proxy) {
-    final inner = HttpClient()
-      ..connectionTimeout = const Duration(seconds: 15);
+    final inner = HttpClient()..connectionTimeout = const Duration(seconds: 15);
     final address = proxy?.trim();
     if (address != null && address.isNotEmpty) {
       inner.findProxy = (_) => 'PROXY $address';
@@ -170,32 +171,50 @@ class UpdateService {
       candidates.add((name, url));
     }
 
-    if (Platform.isAndroid) {
+    if (AppCapabilities.isAndroid) {
       final abi = _androidAbiTag();
-      final best = _firstMatching(
+      final best =
+          _firstMatching(
             candidates,
-            (name) => name.contains('android') && name.contains(abi) && name.endsWith('.apk'),
+            (name) =>
+                name.contains('android') &&
+                name.contains(abi) &&
+                name.endsWith('.apk'),
           ) ??
           _firstMatching(
             candidates,
-            (name) => name.contains('android') && name.contains('universal') && name.endsWith('.apk'),
+            (name) =>
+                name.contains('android') &&
+                name.contains('universal') &&
+                name.endsWith('.apk'),
           ) ??
-          _firstMatching(candidates, (name) => name.contains('android') && name.endsWith('.apk')) ??
+          _firstMatching(
+            candidates,
+            (name) => name.contains('android') && name.endsWith('.apk'),
+          ) ??
           _firstMatching(candidates, (name) => name.endsWith('.apk'));
       return (downloadUrl: best?.$2, sha256Url: null);
     }
 
-    if (Platform.isWindows) {
-      final setup = _firstMatching(
+    if (AppCapabilities.isWindows) {
+      final setup =
+          _firstMatching(
             candidates,
-            (name) => name.contains('windows') && name.contains('setup') && name.endsWith('.exe'),
+            (name) =>
+                name.contains('windows') &&
+                name.contains('setup') &&
+                name.endsWith('.exe'),
           ) ??
           _firstMatching(candidates, (name) => name.endsWith('.exe'));
       if (setup != null) {
-        final hash = _firstMatching(candidates, (name) => name == '${setup.$1}.sha256');
+        final hash = _firstMatching(
+          candidates,
+          (name) => name == '${setup.$1}.sha256',
+        );
         return (downloadUrl: setup.$2, sha256Url: hash?.$2);
       }
-      final zip = _firstMatching(
+      final zip =
+          _firstMatching(
             candidates,
             (name) => name.contains('windows') && name.endsWith('.zip'),
           ) ??

@@ -7,8 +7,8 @@ import '../../core/eh/eh_image.dart';
 import '../../core/eh/eh_models.dart';
 import '../../core/eh/eh_session.dart';
 import '../../l10n/l10n.dart';
+import '../../navigation/app_routes.dart';
 import '../../widgets/ui_kit.dart';
-import 'eh_reader_page.dart';
 
 /// 下载管理：查看进度、暂停/继续、删除与离线阅读。
 class EhDownloadPage extends StatefulWidget {
@@ -285,16 +285,14 @@ class _EhDownloadPageState extends State<EhDownloadPage> {
       pages: download.totalPages,
     );
     await Navigator.of(context).push<void>(
-      MaterialPageRoute(
-        builder: (_) => EhReaderPage(
-          repository: widget.manager.repository,
-          item: download.item,
-          detail: detail,
-          totalPages: download.totalPages,
-          initialIndex: 0,
-          localPagePath: (index) =>
-              widget.manager.localPagePath(download.gid, index),
-        ),
+      AppRoutes.ehReader(
+        repository: widget.manager.repository,
+        item: download.item,
+        detail: detail,
+        totalPages: download.totalPages,
+        initialIndex: 0,
+        localPagePath: (index) =>
+            widget.manager.localPagePath(download.gid, index),
       ),
     );
   }

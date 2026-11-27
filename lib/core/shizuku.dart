@@ -1,6 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
+
+import 'platform_capabilities.dart';
 
 /// Shizuku 服务状态，供设置页与需要 Root 权限的工具共用。
 class ShizukuStatus {
@@ -36,17 +36,14 @@ class ShizukuStatus {
 
   /// 已运行、已授权且为 Root 模式时才可用于读取 QQ 缓存。
   bool get ready =>
-      shizukuInstalled &&
-      shizukuRunning &&
-      permissionGranted &&
-      isRoot;
+      shizukuInstalled && shizukuRunning && permissionGranted && isRoot;
 }
 
 class ShizukuService {
   static const MethodChannel channel = MethodChannel('flupix/shizuku');
 
   Future<ShizukuStatus> status() async {
-    if (!Platform.isAndroid) {
+    if (!AppCapabilities.supportsShizuku) {
       return const ShizukuStatus(
         qqInstalled: false,
         shizukuInstalled: false,
@@ -62,12 +59,12 @@ class ShizukuService {
   }
 
   Future<bool> requestPermission() async {
-    if (!Platform.isAndroid) return false;
+    if (!AppCapabilities.supportsShizuku) return false;
     return await channel.invokeMethod<bool>('requestPermission') ?? false;
   }
 
   Future<bool> openShizuku() async {
-    if (!Platform.isAndroid) return false;
+    if (!AppCapabilities.supportsShizuku) return false;
     return await channel.invokeMethod<bool>('openShizuku') ?? false;
   }
 }
